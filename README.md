@@ -1,6 +1,6 @@
 ## Synopsis
 
-A bold attempt to replicate the tables and figures from the book Mostly Harmless Econometris in the following languages:
+A bold attempt to replicate the tables and figures from the book [_Mostly Harmless Econometrics_](http://www.mostlyharmlesseconometrics.com/) in the following languages:
 * Stata
 * R
 * Python
