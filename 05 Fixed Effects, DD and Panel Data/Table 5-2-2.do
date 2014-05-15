@@ -10,4 +10,3 @@ shell unzip -j njmin.zip
 
 /* End of script*/
 exit
-
