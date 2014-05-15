@@ -11,6 +11,7 @@ A bold attempt to replicate the tables and figures from the book [_Mostly Harmle
 2. The Experimental Ideal
 3. Making Regression Make Sense
 4. Instrumental Variables in Action
-
-
-
+5. Parallel Worlds
+6. Getting a Little Jumpy
+7. Quantile Regression
+8. Nonstandard Standard Error Issues
