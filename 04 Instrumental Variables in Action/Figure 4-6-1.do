@@ -3,9 +3,6 @@ set more off
 capture log close _all
 capture version 13
 
-/* Required additional packages   */
-/* ivreg2: running IV regressions */
-
 log using "Figure 4-6-1-Stata.txt", name(figure040601) text replace
 
 local nsims = 10000
