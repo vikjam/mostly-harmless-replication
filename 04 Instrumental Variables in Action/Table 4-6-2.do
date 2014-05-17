@@ -4,9 +4,10 @@ eststo clear
 capture log close _all
 capture version 13
 
-/* Required additional packages        */
-/* ivreg2: running IV regressions      */
-/* estout: for exporting tables        */
+/* Stata code for Table 4.6.2     */
+/* Required additional packages   */
+/* ivreg2: running IV regressions */
+/* estout: for exporting tables   */
 
 log using "Table 4-6-2-Stata.txt", name(table040602) text replace
 
