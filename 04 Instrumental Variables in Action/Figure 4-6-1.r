@@ -6,24 +6,37 @@
 
 library(AER)
 library(MASS)
+library(ivpack)
 
 nsims = 10000
 set.seed(42)
 
-# Set parameters
-Sigma  = matrix(c(1, 0.8, 0.8, 1), 2, 2)
-errors = mvrnorm(n = 1000, rep(0, 2), Sigma)
-eta    = errors[ , 1]
-xi     = errors[ , 2]
+estimateBeta <- function() {
+    # Store coefficients
+    COEFS <- matrix(, 1, 3)
 
-# Create Z, x, y
-Z = sapply(1:20, function(x) rnorm(1000))
-x = 0.1*Z[ , 1] + xi
-y = x + eta
+    # Set parameters
+    Sigma  = matrix(c(1, 0.8, 0.8, 1), 2, 2)
+    errors = mvrnorm(n = 1000, rep(0, 2), Sigma)
+    eta    = errors[ , 1]
+    xi     = errors[ , 2]
 
-# OLS
-OLS <- lm(y ~ x)
-# 2SLS
+    # Create Z, x, y
+    Z = sapply(1:20, function(x) rnorm(1000))
+    x = 0.1*Z[ , 1] + xi
+    y = x + eta
 
+    # OLS
+    OLS <- lm(y ~ x)
+    COEFS[1, 1] <- summary(OLS)$coefficients[1, 1]
+
+    # 2SLS
+    TSLS <- ivreg(y ~ x, ~ Z)
+    COEFS[1, 2] <- summary(TSLS)$coefficients[1, 1]
+
+    return(COEFS)
+}
+
+ESTB <- sapply(1:nsims, function(x) estimateBeta())
 
 # End of script
