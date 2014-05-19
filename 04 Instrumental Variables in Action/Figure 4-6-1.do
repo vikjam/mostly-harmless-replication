@@ -48,6 +48,20 @@ rename coef1 coefols
 rename coef2 coeftsls
 rename coef3 coefliml
 
+* program define lnsim, rclass
+*     version 13.1
+*     syntax [, obs(integer 1) mu(real 0) sigma(real 1) ]
+*     drop _all
+*     set obs `obs'
+*     tempvar z
+*     gen `z' = exp(rnormal(`mu',`sigma'))
+*     summarize `z'
+*     return scalar mean = r(mean)
+*     return scalar Var  = r(Var)
+* end
+
+* simulate mean=r(mean) var=r(Var), reps(10000): lnsim, obs(100)
+
 cumul coefols, gen(cols)
 cumul coeftsl, gen(ctsls)
 cumul coefliml, gen(climl)
