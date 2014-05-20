@@ -48,7 +48,7 @@ program define weakinstr, rclass
 end
 
 /* Run simulation */
-simulate coefols = r(ols) coeftsls = r(tsls) coefliml = r(limil), reps(100): weakinstr, obs(10000)
+simulate coefols = r(ols) coeftsls = r(tsls) coefliml = r(limil), reps(100): weakinstr, obs(5000))
 
 /* Create empirical CDFs */
 cumul coefols, gen(cols)
