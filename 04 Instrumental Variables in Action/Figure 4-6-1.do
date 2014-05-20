@@ -45,10 +45,11 @@ program define weakinstr, rclass
     return scalar ols  = OLS[1, 1]
     return scalar tsls = TSLS[1, 1]
     return scalar liml = LIML[1, 1]
+
 end
 
 /* Run simulation */
-simulate coefols = r(ols) coeftsls = r(tsls) coefliml = r(limil), reps(10000): weakinstr
+simulate coefols = r(ols) coeftsls = r(tsls) coefliml = r(liml), reps(10000): weakinstr
 
 /* Create empirical CDFs */
 cumul coefols, gen(cols)
@@ -73,7 +74,7 @@ line cols ctsls climl coef if inrange(coef, 0, 2.5),                       ///
     yline(0.5, lcolor("189 189 189") lpattern(shortdash) lwidth(medthick)) ///
     xtitle("estimated {&beta}")                                            ///
     ytitle("empirical F")
-graph export "iv_mc.eps", replace
+graph export "iv-mc-stata.eps", replace
 
 log close figure040601
 /* End of script */
