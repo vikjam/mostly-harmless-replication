@@ -5,7 +5,7 @@ capture version 13
 
 /* Pull data from the 'Mostly Harmless' website */
 /* http://economics.mit.edu/faculty/angrist/data1/mhe/card */
-shell /usr/local/bin/wget -O njmin.zip http://economics.mit.edu/files/3845
+shell wget -O njmin.zip http://economics.mit.edu/files/3845
 shell unzip -j njmin.zip
 
 /* End of script*/
