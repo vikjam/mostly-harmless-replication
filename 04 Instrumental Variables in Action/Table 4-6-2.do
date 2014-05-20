@@ -4,19 +4,19 @@ eststo clear
 capture log close _all
 capture version 13
 
-/* Required additional packages        */
-/* ivreg2: running IV regressions      */
-/* estout: for exporting tables        */
+/* Stata code for Table 4.6.2     */
+/* Required additional packages   */
+/* ivreg2: running IV regressions */
+/* estout: for exporting tables   */
 
 log using "Table 4-6-2-Stata.txt", name(table040602) text replace
 
-/*--------*/
-/* Part a */
-/*--------*/
-
+/* Download data */
 shell /usr/local/bin/wget -O asciiqob.zip http://economics.mit.edu/files/397
+unzipfile asciiqob.zip, replace
 
-use "Angrist-Krueger-1991/zero.dta", clear
+/* Import data */
+infile lwklywge educ yob qob pob using asciiqob.txt, clear
 
 /*Creat variables */
 gen num_qob = yq(1900 + yob, qob)      // Quarter of birth
@@ -67,6 +67,14 @@ eststo col1_ols: regress lwklywge educ i.yob
 eststo col2_ols: regress lwklywge educ i.yob age agesq
 eststo col5_ols: regress lwklywge educ i.yob i.pob
 eststo col6_ols: regress lwklywge educ i.yob i.pob age agesq
+
+/* Export results */
+esttab, keep(educ)               ///
+        b(3) se(3)               ///
+        nostar se noobs mtitles  ///
+        scalars(fstat num_instr) ///
+        plain replace
+eststo clear
 
 log close table040602
 /* End of file */
