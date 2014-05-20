@@ -1,69 +1,58 @@
 clear all
 set more off
 capture log close _all
-capture version 13
+capture version 13.1 // Note this script has only been tested in Stata 13.1
 
 /* Stata code for Figure 4.6.1 */
 
+/* Log output*/
 log using "Figure 4-6-1-Stata.txt", name(figure040601) text replace
 
-local nsims = 10000
+/* Set random seed for replication */
 set seed 42
-set matsize `nsims'
 
-matrix COEF = J(`nsims', 3, .)
+/* Define program for use with -simulate- command */
+capture program drop estbeta
+program define weakinstr, rclass
+    version 12.1
 
-matrix C = (1, 0.8 \ 0.8, 1)
-
-forvalues sim = 1/`nsims' {
-
-    display _n "Simulation `sim'"
+    /* Draw from random normal with correlation of 0.8 and variance of 1 */
+    matrix C = (1, 0.8 \ 0.8, 1)
     quietly drawnorm eta xi, n(1000) corr(C) clear
 
+    /* Create a random instruments */
     forvalues i = 1/20 {
         quietly gen z`i' = rnormal()
     }
 
+    /* Endogenous x only based on z1 while z2-z20 irrelevant */
     quietly gen x = 0.1*z1 + xi
     quietly gen y = x + eta
 
+    /* OLS */
     quietly: regress y x
     matrix OLS = e(b)
 
+    /* 2SLS */
     quietly: ivregress 2sls y (x = z*)
     matrix TSLS = e(b)
 
+    /* LIML */
     quietly: ivregress liml y (x = z*)
     matrix LIML = e(b)
 
-    matrix COEF[`sim', 1] = OLS[1, 1]
-    matrix COEF[`sim', 2] = TSLS[1, 1]
-    matrix COEF[`sim', 3] = LIML[1, 1]
+    /* Return results from program */
+    return scalar ols  = OLS[1, 1]
+    return scalar tsls = TSLS[1, 1]
+    return scalar liml = LIML[1, 1]
+end
 
-}
+/* Run simulation */
+simulate coefols = r(ols) coeftsls = r(tsls) coefliml = r(limil), reps(100): weakinstr, obs(10000)
 
-clear
-svmat COEF, names(coef)
-rename coef1 coefols
-rename coef2 coeftsls
-rename coef3 coefliml
-
-* program define lnsim, rclass
-*     version 13.1
-*     syntax [, obs(integer 1) mu(real 0) sigma(real 1) ]
-*     drop _all
-*     set obs `obs'
-*     tempvar z
-*     gen `z' = exp(rnormal(`mu',`sigma'))
-*     summarize `z'
-*     return scalar mean = r(mean)
-*     return scalar Var  = r(Var)
-* end
-
-* simulate mean=r(mean) var=r(Var), reps(10000): lnsim, obs(100)
-
+/* Create empirical CDFs */
 cumul coefols, gen(cols)
-cumul coeftsl, gen(ctsls)
+cumul coeftsls, gen(ctsls)
 cumul coefliml, gen(climl)
 stack cols coefols ctsls coeftsls climl coefliml, into(c coef) wide clear
 label var coef "beta"
@@ -71,6 +60,7 @@ label var cols "OLS"
 label var ctsls "2SLS"
 label var climl "LIML"
 
+/* Graph results */
 graph set window fontface "Palatino"
 line cols ctsls climl coef if inrange(coef, 0, 2.5),                       ///
     sort                                                                   ///
