@@ -12,7 +12,7 @@ library(parallel)
 nsims = 10
 set.seed(42, "L'Ecuyer")
 
-estimateBeta <- function(...) {
+irrelevantInstrMC <- function(...) {
     # Store coefficients
     COEFS <- rep(NA, 3)
     names(COEFS) <- c("ols", "tsls", "liml")
@@ -36,13 +36,11 @@ estimateBeta <- function(...) {
     TSLS <- ivreg(y ~ x, ~ Z)
     COEFS[2] <- summary(TSLS)$coefficients[1, 1]
 
+    # Return results
     return(COEFS)
 }
 
 # Run simulations
-# SIMBETAS <- simplify2array(mclapply(1:nsims, estimateBeta))
-# print(SIMBETAS)
-
-# ESTB <- sapply(1:nsims, estimateBeta)
+# SIMBETAS <- simplify2array(mclapply(1:nsims, irrelevantInstrMC))
 
 # End of script
