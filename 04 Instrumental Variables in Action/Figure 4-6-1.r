@@ -8,6 +8,7 @@ library(AER)
 library(MASS)
 library(ivpack)
 library(parallel)
+library(ggplot2)
 
 nsims = 10
 set.seed(42, "L'Ecuyer")
@@ -41,6 +42,11 @@ irrelevantInstrMC <- function(...) {
 }
 
 # Run simulations
-# SIMBETAS <- simplify2array(mclapply(1:nsims, irrelevantInstrMC))
+SIMBETAS <- simplify2array(mclapply(1:nsims, irrelevantInstrMC))
+
+df <- data.frame(x = c(rnorm(100, 0, 3), rnorm(100, 0, 10)),
+                 g = gl(2, 100))
+
+ggplot(df, aes(x, colour = g)) + stat_ecdf()
 
 # End of script
