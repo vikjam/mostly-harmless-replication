@@ -9,13 +9,14 @@ library(MASS)
 library(ivpack)
 library(parallel)
 library(ggplot2)
+library(reshape)
 
-nsims = 10
+nsims = 10000
 set.seed(42, "L'Ecuyer")
 
 irrelevantInstrMC <- function(...) {
     # Store coefficients
-    COEFS <- rep(NA, 3)
+    COEFS        <- rep(NA, 3)
     names(COEFS) <- c("ols", "tsls", "liml")
 
     # Set parameters
@@ -30,12 +31,13 @@ irrelevantInstrMC <- function(...) {
     y = x + eta
 
     # OLS
-    OLS <- lm(y ~ x)
-    COEFS[1] <- summary(OLS)$coefficients[1, 1]
+    OLS      <- lm(y ~ x)
+    COEFS[1] <- summary(OLS)$coefficients[2, 1]
+    print(summary(OLS))
 
     # 2SLS
-    TSLS <- ivreg(y ~ x, ~ Z)
-    COEFS[2] <- summary(TSLS)$coefficients[1, 1]
+    TSLS     <- ivreg(y ~ x, ~ Z)
+    COEFS[2] <- summary(TSLS)$coefficients[2, 1]
 
     # Return results
     return(COEFS)
@@ -44,7 +46,17 @@ irrelevantInstrMC <- function(...) {
 # Run simulations
 SIMBETAS <- data.frame(t(simplify2array(mclapply(1:nsims, irrelevantInstrMC))))
 
-df <- data.frame(x = c(SIMBETAS$ols, SIMBETAS$tsls)), g = gl(2, 100))
-ggplot(df, aes(x, colour = g)) + stat_ecdf()
+df           <- melt(SIMBETAS[ , 1:2])
+names(df)    <- c("Estimator", "beta")
+df$Estimator <- factor(df$Estimator, 
+                       levels = c("ols", "tsls", "liml"),
+                       labels = c("OLS", "2SLS", "LIML"))
+g <- ggplot(df, aes(x = beta, colour = Estimator, linetype = Estimator))              + 
+        stat_ecdf(geom = "smooth")                                                    +
+        xlab(expression(widehat(beta))) + ylab(expression(F[n](widehat(beta))))       +
+        scale_linetype_manual(values = c("solid", "longdash", "dotted"))              +
+        scale_color_manual(values = brewer.pal(3, "Set1"), labels = c("OLS", "2SLS")) +
+        theme_set(theme_gray(base_size = 24))                                   
+ggsave(file = "iv-mc-r.png", height = 9, width = 12, dpi = 200)
 
 # End of script
