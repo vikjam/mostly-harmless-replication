@@ -9,6 +9,7 @@ library(MASS)
 library(ivpack)
 library(parallel)
 library(ggplot2)
+library(RColorBrewer)
 library(reshape)
 
 nsims = 10000
