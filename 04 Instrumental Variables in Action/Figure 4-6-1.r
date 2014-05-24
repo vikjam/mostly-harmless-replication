@@ -42,11 +42,9 @@ irrelevantInstrMC <- function(...) {
 }
 
 # Run simulations
-SIMBETAS <- simplify2array(mclapply(1:nsims, irrelevantInstrMC))
+SIMBETAS <- data.frame(t(simplify2array(mclapply(1:nsims, irrelevantInstrMC))))
 
-df <- data.frame(x = c(rnorm(100, 0, 3), rnorm(100, 0, 10)),
-                 g = gl(2, 100))
-
+df <- data.frame(x = c(SIMBETAS$ols, SIMBETAS$tsls)), g = gl(2, 100))
 ggplot(df, aes(x, colour = g)) + stat_ecdf()
 
 # End of script
