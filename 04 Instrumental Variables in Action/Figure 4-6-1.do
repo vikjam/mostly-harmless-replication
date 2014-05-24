@@ -73,7 +73,7 @@ line cols ctsls climl coef if inrange(coef, 0, 2.5),                       ///
     xline(1, lcolor("189 189 189") lpattern(shortdash) lwidth(medthick))   ///
     yline(0.5, lcolor("189 189 189") lpattern(shortdash) lwidth(medthick)) ///
     xtitle("estimated {&beta}")                                            ///
-    ytitle("{&F_n}")
+    ytitle("F{subscript:n}")
 graph export "iv-mc-stata.eps", replace
 
 log close figure040601
