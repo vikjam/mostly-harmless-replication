@@ -11,6 +11,7 @@ library(parallel)
 library(ggplot2)
 library(RColorBrewer)
 library(reshape)
+library(riv)
 
 nsims = 10000
 set.seed(42, "L'Ecuyer")
@@ -32,13 +33,16 @@ irrelevantInstrMC <- function(...) {
     y = x + eta
 
     # OLS
-    OLS      <- lm(y ~ x)
-    COEFS[1] <- summary(OLS)$coefficients[2, 1]
-    print(summary(OLS))
+    OLS           <- lm(y ~ x)
+    COEFS["ols"]  <- summary(OLS)$coefficients[2, 1]
 
     # 2SLS
-    TSLS     <- ivreg(y ~ x, ~ Z)
-    COEFS[2] <- summary(TSLS)$coefficients[2, 1]
+    TSLS          <- ivreg(y ~ x, ~ Z)
+    COEFS["tsls"] <- summary(TSLS)$coefficients[2, 1]
+
+    # LIML
+    LIML          <- riv(y, x, NULL, Z)
+    COEFS["liml"] <- LIML$Summary.Table[2, 1]
 
     # Return results
     return(COEFS)
@@ -47,16 +51,18 @@ irrelevantInstrMC <- function(...) {
 # Run simulations
 SIMBETAS <- data.frame(t(simplify2array(mclapply(1:nsims, irrelevantInstrMC))))
 
-df           <- melt(SIMBETAS[ , 1:2])
+df           <- melt(SIMBETAS[ , 1:3])
 names(df)    <- c("Estimator", "beta")
 df$Estimator <- factor(df$Estimator, 
                        levels = c("ols", "tsls", "liml"),
                        labels = c("OLS", "2SLS", "LIML"))
-g <- ggplot(df, aes(x = beta, colour = Estimator, linetype = Estimator))              + 
-        stat_ecdf(geom = "smooth")                                                    +
-        xlab(expression(widehat(beta))) + ylab(expression(F[n](widehat(beta))))       +
-        scale_linetype_manual(values = c("solid", "longdash", "dotted"))              +
-        scale_color_manual(values = brewer.pal(3, "Set1"), labels = c("OLS", "2SLS")) +
+
+g <- ggplot(df, aes(x = beta, colour = Estimator, linetype = Estimator))        +
+        stat_ecdf(geom = "smooth")                                              +
+        xlab(expression(widehat(beta))) + ylab(expression(F[n](widehat(beta)))) +
+        scale_linetype_manual(values = c("solid", "longdash", "twodash"))       +
+        scale_color_manual(values = brewer.pal(3, "Set1"),
+                           labels = c("OLS", "2SLS", "LIML"))                   +
         theme_set(theme_gray(base_size = 24))                                   
 ggsave(file = "iv-mc-r.png", height = 9, width = 12, dpi = 200)
 
