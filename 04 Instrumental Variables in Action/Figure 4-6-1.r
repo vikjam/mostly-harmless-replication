@@ -7,6 +7,7 @@
 library(AER)
 library(MASS)
 library(ivpack)
+library(sem)
 library(parallel)
 library(ggplot2)
 library(RColorBrewer)
@@ -31,14 +32,26 @@ irrelevantInstrMC <- function(...) {
     x = 0.1*Z[ , 1] + xi
     y = x + eta
 
+    # Create data.frame from the simulated values
+    simulated.data        <- data.frame(cbind(y, x, Z))
+    names(simulated.data) <- c("y", "x", paste("z", seq(20), sep=""))
+
     # OLS
-    OLS      <- lm(y ~ x)
-    COEFS[1] <- summary(OLS)$coefficients[2, 1]
+    OLS          <- lm(y ~ x)
+    COEFS["ols"] <- summary(OLS)$coefficients[2, 1]
     print(summary(OLS))
 
     # 2SLS
-    TSLS     <- ivreg(y ~ x, ~ Z)
-    COEFS[2] <- summary(TSLS)$coefficients[2, 1]
+    TSLS          <- ivreg(y ~ x, ~ Z)
+    COEFS["tsls"] <- summary(TSLS)$coefficients[2, 1]
+
+    # LIML
+    LIML.model <- specifyEquations()
+        y = beta*x
+        x = gamma1*z1   + gamma2*z2   + gamma3*z3   + gamma4*z4   + gamma5*z5   + gamma6*z6   + gamma7*z7   + gamma8*z8   + gamma9*z9   + gamma10*z10 + gamma11*z11 + gamma12*z12 + gamma13*z13 + gamma14*z14 + gamma15*z15 + gamma16*z16 + gamma17*z17 + gamma18*z18 + gamma19*z19 + gamma20*z20
+
+    LIML          <- tsls(y ~ x, instruments = ~ Z)
+    COEFS["liml"] <- summary(LIML)$coefficients[2, 1]
 
     # Return results
     return(COEFS)
