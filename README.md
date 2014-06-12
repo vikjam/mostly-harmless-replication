@@ -7,7 +7,7 @@ A bold attempt to replicate the tables and figures from the book [_Mostly Harmle
 * Julia
 
 ## Chapters
-1. Questions about _Questions_
+1. [Questions about _Questions_](04%20Instrumental%20Variables%20in%20Action/04%20Instrumental%20Variables%20in%20Action.md)
 2. The Experimental Ideal
 3. Making Regression Make Sense
 4. Instrumental Variables in Action
