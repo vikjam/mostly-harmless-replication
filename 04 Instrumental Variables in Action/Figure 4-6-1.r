@@ -29,7 +29,7 @@ irrelevantInstrMC <- function(...) {
 
     # Create Z, x, y
     Z = sapply(1:20, function(x) rnorm(1000))
-    x = 0.1*Z[ , 1] + xi
+    x = 0.1 * Z[ , 1] + xi
     y = x + eta
 
     # Create data.frame from the simulated values
