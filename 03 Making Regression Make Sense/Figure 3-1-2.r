@@ -1,6 +1,7 @@
-# R code for Figure 3.1.2           #
-# Required packages                 #
-# - ggplot2: making pretty graphs   #
+# R code for Figure 3.1.2               #
+# Required packages                     #
+# - ggplot2: making pretty graphs       #
+# - data.table: simple way to aggregate #
 library(ggplot2)
 library(data.table)
 
