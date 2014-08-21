@@ -1,2 +1,19 @@
+# System files
 *.DS_Store
+
+# Data and logs
+*.dat
+*.nj
 *.zip
+*.txt
+
+# Output
+*.pdf
+
+# R
+*.Rhistory
+*.Rdata
+
+# Stata
+*.dta
+
