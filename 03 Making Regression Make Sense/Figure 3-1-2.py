@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+"""
+Used Python 3.4.1
+"""
 
 import urllib
 import zipfile
@@ -12,15 +15,11 @@ with zipfile.ZipFile('asciiqob.zip', "r") as z:
    z.extractall()
 
 # Read the data into a pandas dataframe
-pums = pd.read_csv('asciiqob.txt',
-<<<<<<< HEAD
-=======
-	               index_col        = 0,
->>>>>>> 9ef95fdfd47c504640e4e5e5553471b2f614298f
-	               header           = None,
-	               delim_whitespace = True,
-                   usecols          = [0, 1, 2])
-pums.columns = ['lwklywge', 'educ']
+pums         = pd.read_csv('asciiqob.txt',
+	                       header           = None,
+	                       delim_whitespace = True)
+pums         = pums.ix[:, 1:5]
+pums.columns = ['lwklywge', 'educ', 'yob', 'qob', 'pob']
 
 # Set up the model
 y = pums.lwklywge
@@ -33,20 +32,17 @@ results    = model.fit()
 educ_coef  = results.params[1]
 intercept  = results.params[0]
 
-# Calculate means by educ attainment
-groupbyeduc = pums.groupby('educ')
-educ_means  = groupbyeduc['lwklywge'].mean()
+# Calculate means by educ attainment and predicted values
+groupbyeduc        = pums.groupby('educ')
+educ_means         = groupbyeduc['lwklywge'].mean()
+yhat               = pd.Series(intercept + educ_coef * educ_means.index.values, 
+                               index = educ_means.index.values)
 
-# Plot
-
-
-# Get means by 'educ'
-means = pums.groupby('educ').mean()[1:21]
-## For some reason there are additional 'educ' levels that shouldn't exist.
-print(means)
 # Create plot
 plt.figure()
-means.plot()
+educ_means.plot()
+educ_means.plot(kind = 'area')
+yhat.plot()
 plt.legend().set_visible(False)
 plt.savefig('Figure 3-1-2-Python.pdf')
 
