@@ -18,7 +18,7 @@ infile lwklywge educ yob qob pob using asciiqob.txt, clear
 /* Get fitted line */
 regress lwklywge educ
 predict yhat, xb
-stop
+
 /* Calculate means by collapsing the data */
 collapse lwklywge yhat, by(educ)
 
