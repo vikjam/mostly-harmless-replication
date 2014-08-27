@@ -10,6 +10,6 @@ pums = readtable("asciiqob.txt",
                  header    = false,
                  separator = ' ')
 
-names!(pums, ["lwklywge", "educ"])
+names!(pums, [:lwklywge, :educ, :yob, :qob, :pob])
 
 # End of script
