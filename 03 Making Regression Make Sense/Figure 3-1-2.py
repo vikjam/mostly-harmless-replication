@@ -5,12 +5,13 @@ Used Python 3.4.1
 
 import urllib
 import zipfile
+import urllib.request
 import pandas as pd
 import statsmodels.api as sm
 import matplotlib.pyplot as plt
 
 # Download data and unzip the data
-urllib.urlretrieve('http://economics.mit.edu/files/397', 'asciiqob.zip')
+urllib.request.urlretrieve('http://economics.mit.edu/files/397', 'asciiqob.zip')
 with zipfile.ZipFile('asciiqob.zip', "r") as z:
    z.extractall()
 
@@ -18,7 +19,6 @@ with zipfile.ZipFile('asciiqob.zip', "r") as z:
 pums         = pd.read_csv('asciiqob.txt',
 	                       header           = None,
 	                       delim_whitespace = True)
-pums         = pums.ix[:, 1:5]
 pums.columns = ['lwklywge', 'educ', 'yob', 'qob', 'pob']
 
 # Set up the model
@@ -41,8 +41,9 @@ yhat               = pd.Series(intercept + educ_coef * educ_means.index.values,
 # Create plot
 plt.figure()
 educ_means.plot()
-educ_means.plot(kind = 'area')
 yhat.plot()
+plt.ylabel("Log weekly earnings, \$2003")
+plt.xlabel("Years of completed education")
 plt.legend().set_visible(False)
 plt.savefig('Figure 3-1-2-Python.pdf')
 
