@@ -23,7 +23,7 @@ predict yhat, xb
 collapse lwklywge yhat, by(educ)
 
 /* Graph the figures */
-graph twoway (connected lwklywge educ, lcolor(black) mcolor(black)) /// 
+graph twoway (connected lwklywge educ, lcolor(black) mcolor(black)) ///
 			 (line yhat educ, lcolor(black) lpattern("-")),         ///
 			 ylabel(4.8(0.2)6.6) ymtick(4.9(0.2)6.5)                ///
 			 xlabel(0(2)20) xmtick(1(2)19)                          ///
