@@ -12,9 +12,9 @@ log using "Figure 4-6-1-Stata.txt", name(figure040601) text replace
 set seed 42
 
 /* Define program for use with -simulate- command */
-capture program drop estbeta
+capture program drop weakinstr
 program define weakinstr, rclass
-    version 12.1
+    version 13.1
 
     /* Draw from random normal with correlation of 0.8 and variance of 1 */
     matrix C = (1, 0.8 \ 0.8, 1)
@@ -64,16 +64,16 @@ label var climl "LIML"
 /* Graph results */
 graph set window fontface "Palatino"
 line cols ctsls climl coef if inrange(coef, 0, 2.5),                       ///
-    sort                                                                   ///
-    lpattern(solid dash longdash_dot)                                      ///
-    lwidth(medthick medthick medthick)                                     ///
-    lcolor("228 26 28" "55 126 184" "77 175 74")                           ///
-    scheme(s1color)                                                        ///
-    legend(rows(1) region(lwidth(none)))                                   ///
-    xline(1, lcolor("189 189 189") lpattern(shortdash) lwidth(medthick))   ///
-    yline(0.5, lcolor("189 189 189") lpattern(shortdash) lwidth(medthick)) ///
-    xtitle("estimated {&beta}")                                            ///
-    ytitle("F{subscript:n}")
+     sort                                                                   ///
+     lpattern(solid dash longdash_dot)                                      ///
+     lwidth(medthick medthick medthick)                                     ///
+     lcolor("228 26 28" "55 126 184" "77 175 74")                           ///
+     scheme(s1color)                                                        ///
+     legend(rows(1) region(lwidth(none)))                                   ///
+     xline(1, lcolor("189 189 189") lpattern(shortdash) lwidth(medthick))   ///
+     yline(0.5, lcolor("189 189 189") lpattern(shortdash) lwidth(medthick)) ///
+     xtitle("estimated {&beta}")                                            ///
+     ytitle("F{subscript:n}")
 graph export "iv-mc-stata.eps", replace
 
 log close figure040601
