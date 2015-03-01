@@ -1,19 +1,20 @@
-# R code for Figure 4.6.1           #
-# Required packages                 #
-# - MASS: multivariate normal draws #
-# - AER: running IV regressions     #
-# - ggplot2: making pretty graphs   #
+# R code for Figure 4.6.1                 #
+# Required packages                       #
+# - MASS: multivariate normal draws       #
+# - AER: running IV regressions           #
+# - RcompAngrist: LIML estimators         #
+# - parallel: Parallel process simulation #
+# - ggplot2: making pretty graphs         #
 
 library(AER)
 library(MASS)
-library(ivpack)
+library(RcompAngrist)
 library(parallel)
 library(ggplot2)
 library(RColorBrewer)
 library(reshape)
-library(riv)
 
-nsims = 10000
+nsims = 10
 set.seed(42, "L'Ecuyer")
 
 irrelevantInstrMC <- function(...) {
@@ -45,8 +46,8 @@ irrelevantInstrMC <- function(...) {
     COEFS["tsls"] <- summary(TSLS)$coefficients[2, 1]
 
     # LIML
-    LIML          <- riv(y, x, NULL, Z)
-    COEFS["liml"] <- LIML$Summary.Table[2, 1]
+    LIML          <- kclass(y ~ x | Z)
+    COEFS["liml"] <- LIML$coefficients[1]
 
     # Return results
     return(COEFS)
