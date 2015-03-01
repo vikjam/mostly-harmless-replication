@@ -14,7 +14,7 @@ library(ggplot2)
 library(RColorBrewer)
 library(reshape)
 
-nsims = 10000
+nsims = 1000
 set.seed(42, "L'Ecuyer")
 
 irrelevantInstrMC <- function(...) {
