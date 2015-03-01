@@ -14,7 +14,7 @@ library(ggplot2)
 library(RColorBrewer)
 library(reshape)
 
-nsims = 1000
+nsims = 100
 set.seed(42, "L'Ecuyer")
 
 irrelevantInstrMC <- function(...) {
@@ -68,6 +68,8 @@ g <- ggplot(df, aes(x = beta, colour = Estimator, linetype = Estimator))        
         scale_linetype_manual(values = c("solid", "longdash", "twodash"))       +
         scale_color_manual(values = brewer.pal(3, "Set1"),
                            labels = c("OLS", "2SLS", "LIML"))                   +
+        geom_vline(xintercept = 1.0, linetype = "longdash")                     +
+        geom_hline(yintercept = 0.5, linetype = "longdash")                     +
         theme_set(theme_gray(base_size = 24))                                   
 ggsave(file = "iv-mc-r.png", height = 9, width = 12, dpi = 200)
 
