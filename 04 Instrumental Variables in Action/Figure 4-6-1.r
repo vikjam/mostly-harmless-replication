@@ -8,7 +8,7 @@
 
 library(AER)
 library(MASS)
-library(RcompAngrist)
+library(RCompAngrist)
 library(parallel)
 library(ggplot2)
 library(RColorBrewer)
