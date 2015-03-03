@@ -35,7 +35,7 @@ irrelevantInstrMC <- function(...) {
 
     # Create data.frame from the simulated values
     simulated.data        <- data.frame(cbind(y, x, Z))
-    names(simulated.data) <- c("y", "x", paste("z", seq(20), sep=""))
+    names(simulated.data) <- c("y", "x", paste("z", seq(20), sep = ""))
 
     # OLS
     OLS           <- lm(y ~ x)
@@ -65,6 +65,7 @@ df$Estimator <- factor(df$Estimator,
 g <- ggplot(df, aes(x = beta, colour = Estimator, linetype = Estimator))        +
         stat_ecdf(geom = "smooth")                                              +
         xlab(expression(widehat(beta))) + ylab(expression(F[n](widehat(beta)))) +
+        xlim(0, 2.5)                                                            +
         scale_linetype_manual(values = c("solid", "longdash", "twodash"))       +
         scale_color_manual(values = brewer.pal(3, "Set1"),
                            labels = c("OLS", "2SLS", "LIML"))                   +
