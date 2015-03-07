@@ -33,17 +33,17 @@ educ_coef  = results.params[1]
 intercept  = results.params[0]
 
 # Calculate means by educ attainment and predicted values
-groupbyeduc        = pums.groupby('educ')
-educ_means         = groupbyeduc['lwklywge'].mean()
-yhat               = pd.Series(intercept + educ_coef * educ_means.index.values, 
-                               index = educ_means.index.values)
+groupbyeduc = pums.groupby('educ')
+educ_means  = groupbyeduc['lwklywge'].mean()
+yhat        = pd.Series(intercept + educ_coef * educ_means.index.values, 
+                        index = educ_means.index.values)
 
 # Create plot
 plt.figure()
-educ_means.plot()
+educ_means.plot('-o')
 yhat.plot()
-plt.ylabel("Log weekly earnings, \$2003")
 plt.xlabel("Years of completed education")
+plt.ylabel("Log weekly earnings, \$2003")
 plt.legend().set_visible(False)
 plt.savefig('Figure 3-1-2-Python.pdf')
 
