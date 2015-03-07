@@ -14,8 +14,8 @@ library(ggplot2)
 library(RColorBrewer)
 library(reshape)
 
-nsims = 100
-set.seed(42, "L'Ecuyer")
+nsims = 100000
+set.seed(1984, "L'Ecuyer")
 
 irrelevantInstrMC <- function(...) {
     # Store coefficients
@@ -63,7 +63,7 @@ df$Estimator <- factor(df$Estimator,
                        labels = c("OLS", "2SLS", "LIML"))
 
 g <- ggplot(df, aes(x = beta, colour = Estimator, linetype = Estimator))        +
-        stat_ecdf(geom = "smooth")                                              +
+        stat_ecdf(geom = "step")                                                +
         xlab(expression(widehat(beta))) + ylab(expression(F[n](widehat(beta)))) +
         xlim(0, 2.5)                                                            +
         scale_linetype_manual(values = c("solid", "longdash", "twodash"))       +
@@ -71,7 +71,8 @@ g <- ggplot(df, aes(x = beta, colour = Estimator, linetype = Estimator))        
                            labels = c("OLS", "2SLS", "LIML"))                   +
         geom_vline(xintercept = 1.0, linetype = "longdash")                     +
         geom_hline(yintercept = 0.5, linetype = "longdash")                     +
+	theme(axis.title.y = element_text(angle=0))                             +
         theme_set(theme_gray(base_size = 24))                                   
-ggsave(file = "iv-mc-r.png", height = 9, width = 12, dpi = 200)
+ggsave(file = "iv-mc-r.png", height = 8, width = 12, dpi = 300)
 
 # End of script
