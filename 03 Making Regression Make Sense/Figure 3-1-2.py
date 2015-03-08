@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Used Python 3.4.1
+Tested on Python 3.4
 """
 
 import urllib

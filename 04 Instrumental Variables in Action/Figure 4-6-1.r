@@ -71,7 +71,7 @@ g <- ggplot(df, aes(x = beta, colour = Estimator, linetype = Estimator))        
                            labels = c("OLS", "2SLS", "LIML"))                   +
         geom_vline(xintercept = 1.0, linetype = "longdash")                     +
         geom_hline(yintercept = 0.5, linetype = "longdash")                     +
-	theme(axis.title.y = element_text(angle=0))                             +
+        theme(axis.title.y = element_text(angle=0))                             +
         theme_set(theme_gray(base_size = 24))                                   
 ggsave(file = "iv-mc-r.png", height = 8, width = 12, dpi = 300)
 
