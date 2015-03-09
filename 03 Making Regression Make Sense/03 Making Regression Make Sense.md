@@ -3,4 +3,4 @@
 
 ### Figure 3-1-2
 
-![Figure 3-1-2 in Julia](Figure 3-1-2-Juila.png)
+![Figure 3-1-2 in Julia](Figure-3-1-2-Juila.png)
