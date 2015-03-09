@@ -73,6 +73,6 @@ g <- ggplot(df, aes(x = beta, colour = Estimator, linetype = Estimator))        
         geom_hline(yintercept = 0.5, linetype = "longdash")                     +
         theme(axis.title.y = element_text(angle=0))                             +
         theme_set(theme_gray(base_size = 24))                                   
-ggsave(file = "iv-mc-r.png", height = 8, width = 12, dpi = 300)
+ggsave(file = "Figure 4-6-1-R.png", height = 8, width = 12, dpi = 300)
 
 # End of script
