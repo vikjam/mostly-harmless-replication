@@ -15,15 +15,13 @@ pums = read.table('asciiqob.txt',
                   stringsAsFactors = FALSE)
 names(pums) <- c('lwklywge', 'educ', 'yob', 'qob', 'pob')
 
-# Get coefficent on education
+# Estimate OLS regression
 reg.model <- lm(lwklywge ~ educ, data = pums)
-educ.coef <- summary(reg.model)$coefficients[2]
-intercept <- summary(reg.model)$coefficients[1]
 
 # Calculate means by educ attainment and predicted values
 pums.data.table <- data.table(pums)
 educ.means      <- pums.data.table[ , list(mean = mean(lwklywge)), by = educ]
-educ.means$yhat <- intercept + educ.means$educ * educ.coef
+educ.means$yhat <- predict(reg.model, educ.means)
 
 # Create plot
 p <- ggplot(data = educ.means, aes(x = educ)) +
