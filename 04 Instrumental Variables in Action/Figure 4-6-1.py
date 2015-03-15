@@ -32,6 +32,7 @@ y  = x + eta
 x  = sm.add_constant(x)
 Z  = sm.add_constant(x)
 
-ols = sm.OLS(y, x).fit().params[1]
+ols  = sm.OLS(y, x).fit().params[1]
+tsls = np.linalg.inv(np.transpose(Z).dot(x)).dot(np.transpose(Z).dot(y))[1]
 
 # End of script
