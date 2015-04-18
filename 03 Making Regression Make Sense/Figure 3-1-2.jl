@@ -1,11 +1,11 @@
 # Load packages
 using DataFrames
-using GZip
 using Gadfly
 using GLM
 
-# Download the data
+# Download the data and unzip it
 download("http://economics.mit.edu/files/397", "asciiqob.zip")
+run(`unzip asciiqob.zip`)
 
 # Import data
 pums = readtable("asciiqob.txt",
@@ -27,6 +27,6 @@ figure = plot(means,
               Guide.xlabel("Years of completed education"),
               Guide.ylabel("Log weekly earnings, \$2003"))
 
-draw(SVG("Figure 3-1-2-Julia.png", 5inch, 5inch), figure)
+draw(PNG("Figure 3-1-2-Julia.png", 7inch, 6inch), figure)
 
 # End of script
