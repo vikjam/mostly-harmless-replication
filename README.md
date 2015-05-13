@@ -14,4 +14,4 @@ A bold attempt to replicate the tables and figures from the book [_Mostly Harmle
 5. Parallel Worlds
 6. Getting a Little Jumpy
 7. Quantile Regression
-8. Nonstandard Standard Error Issues
+8. [Nonstandard Standard Error Issues](08%20Nonstandard%20Standard%20Error%20Issues/08%20Nonstanard%20Standard%20Error%20Issues.md)
