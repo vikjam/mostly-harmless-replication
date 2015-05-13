@@ -5,11 +5,13 @@
 # - plyr: apply functions             #
 # - lmtest: simplifies testing        #
 # - reshape2: reshapin' data          #
+# - knitr: print markdown tables      #
 library(sandwich)
 library(parallel)
 library(plyr)
 library(lmtest)
 library(reshape2)
+library(knitr)
 
 # Set seed for replication
 set.seed(1984, "L'Ecuyer")
@@ -95,11 +97,21 @@ summarizeBias <- function(nsims = 25000, sigma = 1) {
     merge(summarize.table, rejections[-1], by = "row.names", all.x = TRUE)
 }
 
+# Function for printing results to markdown
+printBias <- function(obj.df) {
+    colnames(obj.df) <- c("Estimate", "Mean", "Std", "Normal", "t")
+    obj.df$Estimate  <- c("Beta_1", "Conventional", paste0("HC", 0:3), paste0("max(Conventional, HC", 0:3, ")"))
+    print(kable(obj.df, digits = 3))
+}
+
 # Panel A
-print(summarizeBias(nsims = nsims, sigma = 0.5), digits = 3)
+panel.a <- summarizeBias(nsims = nsims, sigma = 0.5)
+printBias(panel.a)
 # Panel B
-print(summarizeBias(nsims = nsims, sigma = 0.85), digits = 3)
+panel.b <- summarizeBias(nsims = nsims, sigma = 0.85)
+printBias(panel.b)
 # Panel C
-print(summarizeBias(nsims = nsims, sigma = 1), digits = 3)
+panel.c <- summarizeBias(nsims = nsims, sigma = 1)
+printBias(panel.c)
 
 # End of file
