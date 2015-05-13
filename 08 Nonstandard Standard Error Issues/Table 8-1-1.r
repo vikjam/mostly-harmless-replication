@@ -4,7 +4,7 @@
 # - parallel: parallelize simulation  #
 # - plyr: apply functions             #
 # - lmtest: simplifies testing        #
-# - reshape: reshapin' data           #
+# - reshape2: reshapin' data          #
 library(sandwich)
 library(parallel)
 library(plyr)
