@@ -3,4 +3,4 @@
 
 ### Figure 6-1-1
 
-![Figure 6-6-1 in Stata](Figure 6-6-1-Stata.png)
+![Figure 6-6-1 in Stata](Figure 6-1-1-Stata.png)
