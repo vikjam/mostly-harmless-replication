@@ -56,24 +56,40 @@ def simulateHC(nsims, sigma):
     for i in range(0, nsims):
         simulation_results[i, :] = generateHC(0.5)
 
-    compare_errors     = np.maximum(simulation_results[:, 1].transpose(), simulation_results[:, 2:6].transpose()).transpose()
-    simulation_results = np.concatenate((simulation_results, compare_errors), axis=1)
-    test_stats         = np.tile(simulation_results[:, 0], (9, 1)).transpose() / simulation_results[:, 1:10]
-    summary_reject_z   = np.mean(2 * scipy.stats.norm.cdf(-abs(test_stats)) <= 0.05, axis = 0).transpose()
-    summary_reject_t   = np.mean(2 * scipy.stats.t.cdf(-abs(test_stats), df = 30 - 2) <= 0.05, axis = 0).transpose()
-    summary_reject_z   = np.concatenate([[np.nan], summary_reject_z]).transpose()
-    summary_reject_t   = np.concatenate([[np.nan], summary_reject_t]).transpose()
+    # Take maximum of conventional versus HC's, and combine with simulation results
+    compare_errors     = np.maximum(simulation_results[:, 1].transpose(),
+                                    simulation_results[:, 2:6].transpose()).transpose()
+    simulation_results = np.concatenate((simulation_results, compare_errors), axis = 1)
+    
+    # Calculate rejection rates (note backslash = explicit line continuation)
+    test_stats       = np.tile(simulation_results[:, 0], (9, 1)).transpose() / \
+                       simulation_results[:, 1:10]
+    summary_reject_z = np.mean(2 * scipy.stats.norm.cdf(-abs(test_stats)) <= 0.05,
+                               axis = 0).transpose()
+    summary_reject_t = np.mean(2 * scipy.stats.t.cdf(-abs(test_stats), df = 30 - 2) <= 0.05,
+                               axis = 0).transpose()
+    summary_reject_z = np.concatenate([[np.nan], summary_reject_z]).transpose()
+    summary_reject_t = np.concatenate([[np.nan], summary_reject_t]).transpose()
 
+    # Calculate mean and standard errors
     summary_mean  = np.mean(simulation_results, axis = 0).transpose()
     summary_std   = np.std(simulation_results, axis = 0).transpose()
-    summary_labs  = np.array(["Beta_1", "Conventional", "HC0", "HC1", "HC2", "HC3",
+
+    # Create labels
+    summary_labs  = np.array(["Beta_1", "Conventional","HC0", "HC1", "HC2", "HC3",
                               "max(Conventional, HC0)", "max(Conventional, HC1)",
                               "max(Conventional, HC2)", "max(Conventional, HC3)"])
-    summary_stats = np.column_stack((summary_labs, summary_mean, summary_std, summary_reject_z, summary_reject_t))
+
+    # Combine all the results and labels
+    summary_stats = np.column_stack((summary_labs,
+                                     summary_mean,
+                                     summary_std,
+                                     summary_reject_z,
+                                     summary_reject_t))
+
+    # Create header for table
     header        = ["Mean", "Std", "z rate", "t rate"]
     return(tabulate(summary_stats, header, tablefmt = "pipe"))
-
-np.set_printoptions(precision = 3)
 
 print("Panel A")
 print(simulateHC(nsims, 0.5))

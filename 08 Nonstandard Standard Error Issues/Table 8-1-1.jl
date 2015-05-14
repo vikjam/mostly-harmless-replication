@@ -6,7 +6,7 @@ using DataFrames
 using GLM
 
 # Set seed
-srand(123)
+srand(08421)
 
 function generateHC(sigma)
     # Set parameters of the simulation
