@@ -2,6 +2,8 @@
 ## 8.1 The Bias of Robust Standard Errors
 
 ### Table 8.1.1
+Completed in [Stata](Table%208-1-1.do), [R](Table%208-1-1.r) and [Python](Table%208-1-1.py)
+
 _Panel A: Lots of Heteroskedasticity_
 
 |Estimate               |   Mean|   Std| Normal|     t|
