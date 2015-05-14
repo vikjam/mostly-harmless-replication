@@ -16,7 +16,7 @@ import scipy.stats
 np.random.seed(1025)
 
 # Set number of simulations
-nsims = 2500
+nsims = 25000
 
 # Create function to create data for each run
 def generateHC(sigma):
@@ -66,10 +66,21 @@ def simulateHC(nsims, sigma):
 
     summary_mean  = np.mean(simulation_results, axis = 0).transpose()
     summary_std   = np.std(simulation_results, axis = 0).transpose()
-    summary_stats = np.column_stack((summary_mean, summary_std, summary_reject_z, summary_reject_t))
-    return(tabulate(summary_stats))
+    summary_labs  = np.array(["Beta_1", "Conventional", "HC0", "HC1", "HC2", "HC3",
+                              "max(Conventional, HC0)", "max(Conventional, HC1)",
+                              "max(Conventional, HC2)", "max(Conventional, HC3)"])
+    summary_stats = np.column_stack((summary_labs, summary_mean, summary_std, summary_reject_z, summary_reject_t))
+    header        = ["Mean", "Std", "z rate", "t rate"]
+    return(tabulate(summary_stats, header, tablefmt = "pipe"))
 
+np.set_printoptions(precision = 3)
+
+print("Panel A")
 print(simulateHC(nsims, 0.5))
+
+print("Panel B")
 print(simulateHC(nsims, 0.85))
+
+print("Panel C")
 print(simulateHC(nsims, 0.1))
 # End of script
