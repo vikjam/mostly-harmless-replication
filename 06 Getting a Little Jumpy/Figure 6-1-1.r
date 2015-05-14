@@ -38,7 +38,7 @@ p.mistake <- g.data + geom_point(aes(y = y.mistake))     +
                       stat_smooth(aes(y = y.mistake),
                                   method = "lm",
                                   se     = FALSE)        +
-                      stat_function(fun = f.mistake,
+                      stat_function(fun      = f.mistake,
                                     linetype = "dashed") +
                       geom_vline(xintercept = 0.5)       +
                       ylab("Outcome")                    +
