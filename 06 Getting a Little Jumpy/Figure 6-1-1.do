@@ -40,7 +40,7 @@ graph twoway (lfit y_mistake x if x < 0.5, lcolor(black))                       
              (lfit y_mistake x if x > 0.5, lcolor(black))                        ///
              (function y = 1 / (1 + exp(-25 * (x - 0.5))), lpattern(dash))       ///
              (scatter y_mistake x, msize(vsmall) msymbol(circle) mcolor(black)), ///
-                title("B. Nonlinearity mistaken for discontinuity")              ///
+                title("C. Nonlinearity mistaken for discontinuity")              ///
                 ytitle("Outcome")                                                ///
                 xtitle("x")                                                      ///
                 xline(0.5, lpattern(dash))                                       ///
@@ -48,8 +48,12 @@ graph twoway (lfit y_mistake x if x < 0.5, lcolor(black))                       
                 legend(off)                                                      ///
                 saving(y_mistake, replace)
 
-graph combine y_linear.gph y_nonlin.gph y_mistake.gph, col(1) scheme(s1mono) xsize(4) ysize(6)
-graph export "Figure 6-1-1-Stata.png"
+graph combine y_linear.gph y_nonlin.gph y_mistake.gph, ///
+    col(1)                                             ///
+    xsize(4) ysize(6)                                  ///
+    graphregion(margin(zero))                          ///
+    scheme(s1mono)
+graph export "Figure 6-1-1-Stata.png", replace
 
 /* End of file */
 exit
