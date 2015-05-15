@@ -4,6 +4,7 @@
 # - lubridate: data management    #
 # - ggplot2: making pretty graphs #
 # - gridExtra: combine graphs     #
+library(lubridate)
 library(dplyr)
 library(ggplot2)
 library(gridExtra)
@@ -27,17 +28,14 @@ pums.qob.means$yqob <- ymd(paste0("19",
                                   pums.qob.means$qob * 3),
                            truncated = 2)
 
-# Plot data
-g.pums <- ggplot(pums.qob.means, aes(x = yqob))
-
 # Function for plotting data
 plot.qob <- function(ggplot.obj, ggtitle, ylab) {
   gg.colours <- c("firebrick", rep("black", 3), "white")
-  ggplot.obj + geom_line(aes(y = educ))                                 +
-               geom_point(aes(y = educ, colour = factor(qob)),
-                              size = 4)                                 +
-               geom_text(aes(y = educ, label = qob, colour = "white"),
-                         size  = 2,
+  ggplot.obj + geom_line()                                              +
+               geom_point(aes(colour = factor(qob)),
+                              size = 5)                                 +
+               geom_text(aes(label = qob, colour = "white"),
+                         size  = 3,
                          hjust = 0.5, vjust = 0.5,
                          show_guide = FALSE)                            +
                scale_colour_manual(values = gg.colours, guide = FALSE)  +
@@ -47,10 +45,11 @@ plot.qob <- function(ggplot.obj, ggtitle, ylab) {
                theme_set(theme_gray(base_size = 10))
 }
 
-p.educ     <- plot.qob(g.pums,
+# Plot
+p.educ     <- plot.qob(ggplot(pums.qob.means, aes(x = yqob, y = educ)),
                        "A. Average education by quarter of birth (first stage)",
                        "Years of education")
-p.lwklywge <- plot.qob(g.pums,
+p.lwklywge <- plot.qob(ggplot(pums.qob.means, aes(x = yqob, y = lwklywge)),
                        "B. Average weekly wage by quarter of birth (reduced form)",
                        "Log weekly earnings")
 
