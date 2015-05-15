@@ -1,6 +1,7 @@
 # R code for Figure 4-1-1         #
 # Required packages               #
 # - dplyr: easy data manipulation #
+# - lubridate: data management    #
 # - ggplot2: making pretty graphs #
 # - gridExtra: combine graphs     #
 library(dplyr)
@@ -19,40 +20,39 @@ names(pums) <- c('lwklywge', 'educ', 'yob', 'qob', 'pob')
 
 # Collapse for means
 pums.qob.means      <- pums %>% group_by(yob, qob) %>% summarise_each(funs(mean))
-pums.qob.means$yqob <- factor(paste(pums.qob.means$yob, pums.qob.means$qob, sep = "-"))
 
-# Labels
-pums.qob.means$labels                          <- pums.qob.means$yob
-pums.qob.means$labels[pums.qob.means$qob != 1] <- ""
+# Add dates
+pums.qob.means$yqob <- ymd(paste0("19",
+                                  pums.qob.means$yob,
+                                  pums.qob.means$qob * 3),
+                           truncated = 2)
 
 # Plot data
-g.pums <- ggplot(pums.qob.means, aes(x = yqob), group = 1)
+g.pums <- ggplot(pums.qob.means, aes(x = yqob))
 
-p.educ <- g.pums + geom_line(aes(y = educ, group = 1))                               +
-                   geom_point(aes(y = educ, shape = factor(qob)))                    +
-                   geom_text(aes(y = educ, label = qob),
-                             size  = 4,
-                             hjust = 0.5, vjust = -0.5,
-                             show_guide = FALSE)                                     +
-                   scale_x_discrete(labels = pums.qob.means$labels)                  +
-                   scale_shape_manual(values = c(15, 0, 0, 0), guide = FALSE)        +
-                   ggtitle("A. Average education by quarter of birth (first stage)") +
-                   xlab("Year of birth")                                             +
-                   ylab("Years of education")                                        +
-                   theme_set(theme_gray(base_size = 12))
+# Function for plotting data
+plot.qob <- function(ggplot.obj, ggtitle, ylab) {
+  gg.colours <- c("firebrick", rep("black", 3), "white")
+  ggplot.obj + geom_line(aes(y = educ))                                 +
+               geom_point(aes(y = educ, colour = factor(qob)),
+                              size = 4)                                 +
+               geom_text(aes(y = educ, label = qob, colour = "white"),
+                         size  = 2,
+                         hjust = 0.5, vjust = 0.5,
+                         show_guide = FALSE)                            +
+               scale_colour_manual(values = gg.colours, guide = FALSE)  +
+               ggtitle(ggtitle)                                         +
+               xlab("Year of birth")                                    +
+               ylab(ylab)                                               +
+               theme_set(theme_gray(base_size = 10))
+}
 
-p.lwklywge <- g.pums + geom_line(aes(y = lwklywge, group = 1))                          +
-                   geom_point(aes(y = lwklywge, shape = factor(qob)))                   +
-                   geom_text(aes(y = lwklywge, label = qob),
-                             size  = 4,
-                             hjust = -0.5, vjust = 0,
-                             show_guide = FALSE)                                        +
-                   scale_x_discrete(labels = pums.qob.means$labels)                     +
-                   scale_shape_manual(values = c(15, 0, 0, 0), guide = FALSE)           +
-                   ggtitle("B. Average weekly wage by quarter of birth (reduced form)") +
-                   xlab("Year of birth")                                                +
-                   ylab("Log weekly earnings")                                          +
-                   theme_set(theme_gray(base_size = 12))
+p.educ     <- plot.qob(g.pums,
+                       "A. Average education by quarter of birth (first stage)",
+                       "Years of education")
+p.lwklywge <- plot.qob(g.pums,
+                       "B. Average weekly wage by quarter of birth (reduced form)",
+                       "Log weekly earnings")
 
 p.ivgraph  <- arrangeGrob(p.educ, p.lwklywge)
 
