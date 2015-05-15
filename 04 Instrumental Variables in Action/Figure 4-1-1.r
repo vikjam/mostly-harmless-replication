@@ -37,8 +37,8 @@ p.educ <- g.pums + geom_line(aes(y = educ, group = 1))                          
                    scale_x_discrete(labels = pums.qob.means$labels)                  +
                    scale_shape_manual(values = c(15, 0, 0, 0), guide = FALSE)        +
                    ggtitle("A. Average education by quarter of birth (first stage)") +
-                   xlab("Year of birth")                                      +
-                   ylab("Years of education")                                 +
+                   xlab("Year of birth")                                             +
+                   ylab("Years of education")                                        +
                    theme_set(theme_gray(base_size = 12))
 
 p.lwklywge <- g.pums + geom_line(aes(y = lwklywge, group = 1))                          +
