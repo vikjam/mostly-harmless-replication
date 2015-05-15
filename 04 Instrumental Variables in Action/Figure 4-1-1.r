@@ -28,28 +28,30 @@ pums.qob.means$labels[pums.qob.means$qob != 1] <- ""
 # Plot data
 g.pums <- ggplot(pums.qob.means, aes(x = yqob), group = 1)
 
-p.educ <- g.pums + geom_line(aes(y = educ, group = 1))                        +
-                   geom_point(aes(y = educ, shape = factor(qob)))             +
+p.educ <- g.pums + geom_line(aes(y = educ, group = 1))                               +
+                   geom_point(aes(y = educ, shape = factor(qob)))                    +
                    geom_text(aes(y = educ, label = qob),
                              size  = 4,
                              hjust = 0.5, vjust = -0.5,
-                             show_guide = FALSE)                              +
-                   scale_x_discrete(labels = pums.qob.means$labels)           +
-                   scale_shape_manual(values = c(15, 0, 0, 0), guide = FALSE) +
+                             show_guide = FALSE)                                     +
+                   scale_x_discrete(labels = pums.qob.means$labels)                  +
+                   scale_shape_manual(values = c(15, 0, 0, 0), guide = FALSE)        +
+                   ggtitle("A. Average education by quarter of birth (first stage)") +
                    xlab("Year of birth")                                      +
                    ylab("Years of education")                                 +
                    theme_set(theme_gray(base_size = 12))
 
-p.lwklywge <- g.pums + geom_line(aes(y = lwklywge, group = 1))                +
-                   geom_point(aes(y = lwklywge, shape = factor(qob)))         +
+p.lwklywge <- g.pums + geom_line(aes(y = lwklywge, group = 1))                          +
+                   geom_point(aes(y = lwklywge, shape = factor(qob)))                   +
                    geom_text(aes(y = lwklywge, label = qob),
                              size  = 4,
                              hjust = -0.5, vjust = 0,
-                             show_guide = FALSE)                              +
-                   scale_x_discrete(labels = pums.qob.means$labels)           +
-                   scale_shape_manual(values = c(15, 0, 0, 0), guide = FALSE) +
-                   xlab("Year of birth")                                      +
-                   ylab("Log weekly earnings")                                +
+                             show_guide = FALSE)                                        +
+                   scale_x_discrete(labels = pums.qob.means$labels)                     +
+                   scale_shape_manual(values = c(15, 0, 0, 0), guide = FALSE)           +
+                   ggtitle("B. Average weekly wage by quarter of birth (reduced form)") +
+                   xlab("Year of birth")                                                +
+                   ylab("Log weekly earnings")                                          +
                    theme_set(theme_gray(base_size = 12))
 
 p.ivgraph  <- arrangeGrob(p.educ, p.lwklywge)
