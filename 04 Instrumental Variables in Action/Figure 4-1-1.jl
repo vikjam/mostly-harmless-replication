@@ -6,7 +6,7 @@ using Dates
 
 # Download the data and unzip it
 download("http://economics.mit.edu/files/397", "asciiqob.zip")
-run(`unzip asciiqob.zip`)
+run(`unzip -o asciiqob.zip`)
 
 # Import data
 pums = readtable("asciiqob.txt",
@@ -14,14 +14,14 @@ pums = readtable("asciiqob.txt",
                  separator = ' ')
 names!(pums, [:lwklywge, :educ, :yob, :qob, :pob])
 
+# Aggregate into means for figure
+means = aggregate(pums, [:yob, :qob], [mean])
+
 # Create dates
 n = nrow(means)
 means[:date] = NA
 for i = 1:n
-    means[i] = DateTime(1900 + means[:yob][i], means[:qob][i] * 12, 1)
+    means[:date][i] = DateTime(1900 + means[:yob][i], means[:qob][i] * 12, 1)
 end
-
-# Aggregate into means for figure
-means = aggregate(pums, [:yob, :qob], [mean])
 
 # End of file
