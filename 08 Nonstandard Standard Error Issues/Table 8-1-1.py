@@ -98,5 +98,5 @@ print("Panel B")
 print(simulateHC(nsims, 0.85))
 
 print("Panel C")
-print(simulateHC(nsims, 0.1))
+print(simulateHC(nsims, 1))
 # End of script

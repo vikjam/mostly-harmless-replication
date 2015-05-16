@@ -3,11 +3,9 @@
 # - DataFrames: data manipulation / storage #
 # - Distributions: extended stats functions #
 # - GLM: regression                         #
-# - YTables: output markdown                #
 using DataFrames
 using Distributions
 using GLM
-using YTables
 
 # Set seed
 srand(08421)
@@ -52,11 +50,47 @@ function generateHC(sigma)
     vcovHC3 = inv(transpose(X) * X) * (transpose(X) * meat3 * X) * inv(transpose(X) * X)
     hc3 = sqrt(vcovHC3[2, 2])
 
-    return [b1 conv hc0 hc1 hc2 hc3]
+    return [b1 conv hc0 hc1 hc2 hc3 max(conv, hc0) max(conv, hc1) max(conv, hc2) max(conv, hc3)]
 end
 
-simulation_results = zeros(nsims, 6)
+# Function to run simulation
+function simulateHC(nsims, sigma)
+    # Run simulation
+    simulation_results = zeros(nsims, 10)
 
-for i = 1:nsims
-    simulation_results[i, :] = generateHC(0.5)
+    for i = 1:nsims
+        simulation_results[i, :] = generateHC(sigma)
+    end
+
+    # Calculate mean and standard deviation
+    mean_est = mean(simulation_results, 1)
+    std_est  = std(simulation_results, 1)
+
+    # Calculate rejection rates
+    test_stats = simulation_results[:, 1] ./ simulation_results[:, 2:10]
+    reject_z   = mean(2 * pdf(Normal(0, 1), -abs(test_stats)) .<= 0.05, 1)
+    reject_t   = mean(2 * pdf(TDist(30 - 2), -abs(test_stats)) .<= 0.05, 1)
+
+    # Combine columns
+    value_labs   = ["Beta_1" "conv" "HC0" "HC1" "HC2" "HC3" "max(conv, HC0)" "max(conv, HC1)" "max(conv, HC2)" "max(conv, HC3)"]
+    summ_stats   = [mean_est; std_est]
+    reject_stats = [0 reject_z; 0 reject_t]
+
+    all_stats = convert(DataFrame, transpose([value_labs; summ_stats; reject_stats]))
+    names!(all_stats, [:estimate, :mean, :std, :reject_z, :reject_t])
+    all_stats[1, 4:5] = NA
+
+    return(all_stats)
 end
+
+println("Panel A")
+println(simulateHC(nsims, 0.5))
+
+println("Panel B")
+println(simulateHC(nsims, 0.85))
+
+println("Panel C")
+println(simulateHC(nsims, 1))
+
+# End of script
+
