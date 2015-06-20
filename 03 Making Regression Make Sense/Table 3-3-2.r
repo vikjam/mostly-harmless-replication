@@ -1,8 +1,7 @@
 # R code for Table 3-3-2     #
 # Required packages          #
-# - haven: read .dta files #
+# - haven: read .dta files   #
 # - knitr: print markdown    #
-
 library(haven)
 library(knitr)
 
@@ -83,6 +82,6 @@ colnames(summary.stats)  <- c("NSW Treat", "NSW Control",
                               "P-score CPS-1", "P-score CPS-3")
 
 # Print table in markdown
-kable(summary.stats)
+print(kable(summary.stats))
 
 # End of script
