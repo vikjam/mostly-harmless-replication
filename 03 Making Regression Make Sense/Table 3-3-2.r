@@ -1,9 +1,9 @@
 # R code for Table 3-3-2     #
 # Required packages          #
-# - foreign: read .dta files #
+# - haven: read .dta files #
 # - knitr: print markdown    #
 
-library(foreign)
+library(haven)
 library(knitr)
 
 # Download the files
@@ -12,9 +12,9 @@ download.file("http://economics.mit.edu/files/3824", "cps1re74.dta")
 download.file("http://economics.mit.edu/files/3825", "cps3re74.dta")
 
 # Read the Stata files into R
-nswre74  <- read.dta("nswre74.dta")
-cps1re74 <- read.dta("cps1re74.dta")
-cps3re74 <- read.dta("cps3re74.dta")
+nswre74  <- read_dta("nswre74.dta")
+cps1re74 <- read_dta("cps1re74.dta")
+cps3re74 <- read_dta("cps3re74.dta")
 
 # Function to create propensity trimmed data
 propensity.trim <- function(dataset) {

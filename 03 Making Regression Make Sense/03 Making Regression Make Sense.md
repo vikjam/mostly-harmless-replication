@@ -6,6 +6,7 @@ Completed in [Stata](Figure%203-1-2.do), [R](Figure%203-1-2.r), [Python](Figure%
 ![Figure 3-1-2 in Julia](Figure 3-1-2-Julia.png)
 
 ### Table 3-3-2
+Completed in [Stata](Table%203-3-2.do) and [R](Table%203-3-2.r)
 
 _Covariate means in the NSW and observational control samples_
 
