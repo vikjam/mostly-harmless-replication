@@ -62,13 +62,13 @@ summary.stats <- rbind(nswre74.treat.stats,
 # Round the digits and transpose table
 summary.stats <- cbind(round(summary.stats[ , 1:6], 2),
                        formatC(round(summary.stats[ , 7:9], 0),
-                               format = "d",
+                               format   = "d",
                                big.mark = ","))
 summary.stats <- t(summary.stats)
 
 # Format table with row and column names
 row.names(summary.stats) <- c("Age",
-                              "Years of Schooling",
+                              "Years of schooling",
                               "Black",
                               "Hispanic",
                               "Dropout",

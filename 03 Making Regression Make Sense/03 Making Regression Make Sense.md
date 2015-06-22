@@ -6,14 +6,14 @@ Completed in [Stata](Figure%203-1-2.do), [R](Figure%203-1-2.r), [Python](Figure%
 ![Figure 3-1-2 in Julia](Figure 3-1-2-Julia.png)
 
 ### Table 3-3-2
-Completed in [Stata](Table%203-3-2.do) and [R](Table%203-3-2.r)
+Completed in [Stata](Table%203-3-2.do), [R](Table%203-3-2.r) and [Python](Table%203-3-2.py)
 
 _Covariate means in the NSW and observational control samples_
 
 |                   |NSW Treat |NSW Control |Full CPS-1 |Full CPS-3 |P-score CPS-1 |P-score CPS-3 |
 |:------------------|:---------|:-----------|:----------|:----------|:-------------|:-------------|
 |Age                |25.82     |25.05       |33.23      |28.03      |25.63         |25.97         |
-|Years of Schooling |10.35     |10.09       |12.03      |10.24      |10.49         |10.42         |
+|Years of schooling |10.35     |10.09       |12.03      |10.24      |10.49         |10.42         |
 |Black              |0.84      |0.83        |0.07       |0.2        |0.96          |0.52          |
 |Hispanic           |0.06      |0.11        |0.07       |0.14       |0.03          |0.2           |
 |Dropout            |0.71      |0.83        |0.3        |0.6        |0.6           |0.63          |
