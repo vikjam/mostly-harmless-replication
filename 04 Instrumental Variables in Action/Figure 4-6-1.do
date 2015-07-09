@@ -63,7 +63,7 @@ label var climl "LIML"
 
 /* Graph results */
 graph set window fontface "Palatino"
-line cols ctsls climl coef if inrange(coef, 0, 2.5),                       ///
+line cols ctsls climl coef if inrange(coef, 0, 2.5),                        ///
      sort                                                                   ///
      lpattern(solid dash longdash_dot)                                      ///
      lwidth(medthick medthick medthick)                                     ///

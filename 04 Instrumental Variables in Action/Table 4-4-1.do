@@ -1,13 +1,15 @@
 clear all
 set more off
-eststo clear
-capture log close _all
-capture version 13
 
 /* Stata code for Table 4.4.1*/
-log using "Table 4-4-1-Stata.txt", name(table040401) text replace
+* shell curl -o jtpa.raw http://economics.mit.edu/files/614
 
-log close table040401
+/* Import data */
+infile ym   zm   dm   sex  xm6  xm7  xm8  xm9  xm10 ///
+       xm17 xm18 xm12 xm13 xm14 xm15 xm16 xm19 using jtpa.raw, clear
+
+reg sex xm6
+
 
 /* End of file */
 exit

@@ -2,8 +2,8 @@ clear all
 set more off
 eststo clear
 capture version 13
-/* Required programs         */
-/* - estout: read .dta files */
+/* Required programs      */
+/* - estout: output table */
 
 /* Stata code for Table 3.3.2*/
 

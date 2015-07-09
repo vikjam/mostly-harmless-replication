@@ -3,7 +3,7 @@ set more off
 /* Stata code for Figure 4-1-1 */
 
 /* Download data */
-shell /usr/local/bin/wget -O asciiqob.zip http://economics.mit.edu/files/397
+shell curl -o asciiqob.zip http://economics.mit.edu/files/397
 unzipfile asciiqob.zip, replace
 
 /* Import data */

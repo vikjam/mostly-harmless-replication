@@ -10,13 +10,13 @@ library(ggplot2)
 library(gridExtra)
 
 # Download data and unzip the data
-# download.file('http://economics.mit.edu/files/397', 'asciiqob.zip')
-# unzip('asciiqob.zip')
+download.file('http://economics.mit.edu/files/397', 'asciiqob.zip')
+unzip('asciiqob.zip')
 
 # Read the data into a dataframe
-pums = read.table('asciiqob.txt',
-                  header           = FALSE,
-                  stringsAsFactors = FALSE)
+pums        <- read.table('asciiqob.txt',
+                          header           = FALSE,
+                          stringsAsFactors = FALSE)
 names(pums) <- c('lwklywge', 'educ', 'yob', 'qob', 'pob')
 
 # Collapse for means

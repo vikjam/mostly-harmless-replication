@@ -8,8 +8,8 @@ capture version 13
 /* !! Can't find right data !! */
 
 /* Download data */
-* shell /usr/local/bin/wget -O asciiqob.zip http://economics.mit.edu/files/397
-* unzipfile asciiqob.zip, replace
+shell curl -o asciiqob.zip http://economics.mit.edu/files/397
+unzipfile asciiqob.zip, replace
 
 /* Import data */
 infile lwklywge educ yob qob pob using asciiqob.txt, clear
@@ -20,8 +20,8 @@ regress lwklywge educ
 /* Robust standard errors */
 regress lwklywge educ, robust
 
-/* Collapse data for Panel B */
-gen count = 1
+/* Collapse data for Panel B (counting only if in sample) */
+gen count = 1 if e(sample)
 collapse (sum) count (mean) lwklywge, by(educ)
 
 /* Old-fashioned standard errors */
