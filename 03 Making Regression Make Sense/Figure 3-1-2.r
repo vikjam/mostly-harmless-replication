@@ -10,9 +10,9 @@ download.file('http://economics.mit.edu/files/397', 'asciiqob.zip')
 unzip('asciiqob.zip')
 
 # Read the data into a dataframe
-pums = read.table('asciiqob.txt',
-                  header           = FALSE,
-                  stringsAsFactors = FALSE)
+pums        <- read.table('asciiqob.txt',
+                          header           = FALSE,
+                          stringsAsFactors = FALSE)
 names(pums) <- c('lwklywge', 'educ', 'yob', 'qob', 'pob')
 
 # Estimate OLS regression
