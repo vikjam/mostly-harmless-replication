@@ -27,8 +27,12 @@ birth_means  = groupbybirth['lwklywge', 'educ'].mean()
 
 # Plot figures
 plt.figure()
-birth_means.plot(x = 'lwklywge', y = 'educ')
+plt.subplot(2, 1, 1)
+birth_means.plot(y = 'educ', marker = 'o')
 plt.legend().set_visible(False)
-plt.savefig('Figure 4-1-1-Python.pdf')
+plt.subplot(2, 1, 2)
+birth_means.plot(y = 'lwklywge', marker = 'o')
+plt.savefig('Figure 4-1-1-Python.pdf', format = 'pdf')
+plt.close('all')
 
 # End of file
