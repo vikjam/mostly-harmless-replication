@@ -27,15 +27,12 @@ gen svcfrac = svcemp / nonemp
 gen bizemp = svcemp + peremp
 gen lnbiz  = log(biz)
 
-/* State dummies, year dummies, and state*time trends */
-gen t  = year-78
-gen t2 = t^2
-drop if state == 98
-xi i.state i.year i.state*t i.state*t2 i.region*i.year
-drop _Iyear_77 - _Iyear_79
+/* Time trends */
+gen t  = year - 78 // Linear time trend
+gen t2 = t^2       // Quadratic time trend
 
 /* Restrict sample */
-keep if inrange(year, 79, 95)
+keep if inrange(year, 79, 95) & state != 98
 
 /* Generate more aggregate demographics */
 gen clp     = clg + gtc
@@ -53,7 +50,10 @@ replace unmem = . if inlist(year, 79, 81) // Don't interpolate 1979, 1981
 replace unmem = unmem * 100               // Rescale into percentage
 
 /* Diff-in-diff regression */
-reg lnths lnemp admico_2 admico_1 admico0 admico1 admico2 admico3 mico4 admppa_2 admppa_1 admppa0 admppa1 admppa2 admppa3 mppa4 admgfa_2 admgfa_1 admgfa0 admgfa1 admgfa2 admgfa3 mgfa4 i.year i.state i.state#c.t, cluster(state)
+reg lnths lnemp admico_2 admico_1 admico0 admico1 admico2 admico3 mico4 admppa_2 admppa_1   ///
+    admppa0 admppa1 admppa2 admppa3 mppa4 admgfa_2 admgfa_1 admgfa0 admgfa1 admgfa2 admgfa3 ///
+    mgfa4 i.year i.state i.state#c.t, cluster(state)
+
 coefplot, keep(admico_2 admico_1 admico0 admico1 admico2 admico3 mico4)                     ///
           coeflabels(admico_2 = "2 yr prior"                                                ///
                      admico_1 = "1 yr prior"                                                ///
