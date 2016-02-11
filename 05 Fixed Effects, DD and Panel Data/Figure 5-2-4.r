@@ -6,8 +6,8 @@ library(plm)
 library(lmtest)
 
 # Download the data and unzip it
-download.file('http://economics.mit.edu/~dautor/outsourcingatwill_table7.zip', 'outsourcingatwill_table7.zip')
-unzip('outsourcingatwill_table7.zip')
+# download.file('http://economics.mit.edu/~dautor/outsourcingatwill_table7.zip', 'outsourcingatwill_table7.zip')
+# unzip('outsourcingatwill_table7.zip')
 
 # Load the data
 autor <- read.dta('table7/autor-jole-2003.dta')
@@ -51,18 +51,11 @@ autor$unmem                                      <- autor$unmem * 100
 p.df <- pdata.frame(autor, index = c('state', 'year'))
 
 # Diff-in-diff regression
-pdid <- plm(lnths ~ lnemp    + admico_2 + admico_1 + admico0 + admico1 + admico2 + admico3 + mico4    +
-                    admppa_2 + admppa_1 + admppa0  + admppa1 + admppa2 + admppa3 + mppa4   + admgfa_2 +
-                    admgfa_1 + admgfa0  + admgfa1  + admgfa2 + admgfa3 + mgfa4   +
-                    factor(year) + factor(state) + factor(state) * t,
-                    data  = p.df,
-                    model = 'pooling')
-
-did <- lm(lnths ~ lnemp    + admico_2 + admico_1 + admico0 + admico1 + admico2 + admico3 + mico4    +
-                   admppa_2 + admppa_1 + admppa0  + admppa1 + admppa2 + admppa3 + mppa4   + admgfa_2 +
-                   admgfa_1 + admgfa0  + admgfa1  + admgfa2 + admgfa3 + mgfa4   +
-                   factor(year) + factor(state) + factor(state) * t,
-                   data  = autor)
+p.did <- plm(lnths ~ lnemp    + admico_2 + admico_1 + admico0 + admico1 + admico2 + admico3 + mico4    +
+                     admppa_2 + admppa_1 + admppa0  + admppa1 + admppa2 + admppa3 + mppa4   + admgfa_2 +
+                     admgfa_1 + admgfa0  + admgfa1  + admgfa2 + admgfa3 + mgfa4   +
+                     factor(year) + t:factor(state),
+                     data  = p.df)
 
 # Compute Stata like degrees of freedom adjustment
 G   <- length(unique(p.df$state))
