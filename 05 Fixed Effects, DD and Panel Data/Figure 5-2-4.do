@@ -7,8 +7,8 @@ capture version 14
 
 /* Download the data and unzip it */
 
-* shell curl -o outsourcingatwill_table7.zip "http://economics.mit.edu/~dautor/outsourcingatwill_table7.zip"
-* unzipfile outsourcingatwill_table7.zip
+shell curl -o outsourcingatwill_table7.zip "http://economics.mit.edu/~dautor/outsourcingatwill_table7.zip"
+unzipfile outsourcingatwill_table7.zip
 
 /*-------------*/
 /* Import data */
