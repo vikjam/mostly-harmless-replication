@@ -1,9 +1,11 @@
-# R code for Figure 4-1-1             #
-# Required packages                   #
-# foreign: read Stata .dta files      #
+# R code for Figure 5-2-4            #
+# Required packages                  #
+# foreign: read Stata .dta files     #
+# lfe: run fixed effect regressions  #
+# ggplot2: plot results              #
 library(foreign)
-library(plm)
-library(lmtest)
+library(lfe)
+library(scales)
 
 # Download the data and unzip it
 # download.file('http://economics.mit.edu/~dautor/outsourcingatwill_table7.zip', 'outsourcingatwill_table7.zip')
@@ -47,23 +49,37 @@ autor$married <- autor$marfem + autor$marmale
 autor$unmem[79 >= autor$year & autor$year >= 81] <- NA
 autor$unmem                                      <- autor$unmem * 100
 
-# Make into a panel data set
-p.df <- pdata.frame(autor, index = c('state', 'year'))
+# Create state and year factors
+autor$state <- factor(autor$state)
+autor$year  <- factor(autor$year)
 
 # Diff-in-diff regression
-p.did <- plm(lnths ~ lnemp    + admico_2 + admico_1 + admico0 + admico1 + admico2 + admico3 + mico4    +
-                     admppa_2 + admppa_1 + admppa0  + admppa1 + admppa2 + admppa3 + mppa4   + admgfa_2 +
-                     admgfa_1 + admgfa0  + admgfa1  + admgfa2 + admgfa3 + mgfa4   +
-                     factor(year) + t:factor(state),
-                     data  = p.df)
+did <- felm(lnths ~ lnemp   + admico_2 + admico_1 + admico0  + admico1  + admico2 + 
+                    admico3 + mico4    + admppa_2 + admppa_1 + admppa0  + admppa1 +
+                    admppa2 + admppa3  + mppa4    + admgfa_2 + admgfa_1 + admgfa0 +
+                    admgfa1 + admgfa2  + admgfa3  + mgfa4
+                    | state + year + state:t | 0 | state, data = autor)
 
-# Compute Stata like degrees of freedom adjustment
-G   <- length(unique(p.df$state))
-N   <- length(p.df$state)
-DFA <- (G / (G - 1)) * (N - 1) / did$df.residual
- 
-# Calculate cluster VCE
-did_vcov <- DFA * vcovHC(did, type = "HC1", cluster = "group", adjust = TRUE)
-coeftest(pdid, vcov = did_vcov)
+# Plot results
+lags_leads  <- c("admico_2", "admico_1", "admico0",
+                 "admico1" , "admico2" , "admico3",
+                 "mico4")
+labels      <- c("2 yr prior", "1 yr prior", "Yr of adopt",
+                 "1 yr after", "2 yr after", "3 yr after",
+                 "4+ yr after")
+results.did <- data.frame(label = factor(labels, levels = labels),
+                          coef  = summary(did)$coef[lags_leads, "Estimate"] * 100,
+                          se    = summary(did)$coef[lags_leads, "Cluster s.e."] * 100)
+g           <- ggplot(results.did, aes(label, coef, group = 1))
+p           <- g + geom_point()                                +
+                   geom_line(linetype = "dotted")              + 
+                   geom_errorbar(aes(ymax = coef + 1.96 * se,
+                                     ymin = coef - 1.96 * se)) +
+                   geom_hline(yintercept = 0)                  +
+                   ylab("Log points")                          +
+                   xlab(paste("Time passage relative to year of",
+                              "adoption of implied contract exception"))
+
+ggsave(p, file = "Figure 5-2-4-R.png", height = 6, width = 8, dpi = 300)
 
 # End of script
