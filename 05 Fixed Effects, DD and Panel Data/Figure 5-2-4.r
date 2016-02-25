@@ -6,10 +6,11 @@
 library(foreign)
 library(lfe)
 library(scales)
+library(ggplot2)
 
 # Download the data and unzip it
-# download.file('http://economics.mit.edu/~dautor/outsourcingatwill_table7.zip', 'outsourcingatwill_table7.zip')
-# unzip('outsourcingatwill_table7.zip')
+download.file('http://economics.mit.edu/~dautor/outsourcingatwill_table7.zip', 'outsourcingatwill_table7.zip')
+unzip('outsourcingatwill_table7.zip')
 
 # Load the data
 autor <- read.dta('table7/autor-jole-2003.dta')
