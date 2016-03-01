@@ -8,8 +8,8 @@ library(ggplot2)
 library(gridExtra)
 
 # Download the data
-# download.file("http://economics.mit.edu/files/1359", "final4.dta")
-# download.file("http://economics.mit.edu/files/1358", "final5.dta")
+download.file("http://economics.mit.edu/files/1359", "final4.dta")
+download.file("http://economics.mit.edu/files/1358", "final5.dta")
 
 # Load the data
 grade4 <- read_dta("final4.dta")
@@ -38,21 +38,23 @@ maimonides.rule <- function(x) {x / (floor((x - 1)/40) + 1)}
 
 # Plot each grade
 g4 <- ggplot(data = grade4cmeans, aes(x = c_size))
-p4 <- g4 + geom_line(aes(y = classize.mean))         +
+p4 <- g4 + geom_line(aes(y = classize.mean))            +
            stat_function(fun      = maimonides.rule,
-                         linetype = "dashed")        +
-           expand_limits(y = 0, x = 1)               +
-           ylab("Class size")                        +
-           xlab("Enrollment count")                  +
+                         linetype = "dashed")           +
+           expand_limits(y = 0)                         +
+           scale_x_continuous(breaks = seq(0, 220, 20)) +
+           ylab("Class size")                           +
+           xlab("Enrollment count")                     +
            ggtitle("B. Fourth grade")
 
 g5 <- ggplot(data = grade5cmeans, aes(x = c_size))
-p5 <- g5 + geom_line(aes(y = classize.mean))         +
+p5 <- g5 + geom_line(aes(y = classize.mean))            +
            stat_function(fun      = maimonides.rule,
-                         linetype = "dashed")        +
-           expand_limits(y = 0, x = 1)               +
-           ylab("Class size")                        +
-           xlab("Enrollment count")                  +
+                         linetype = "dashed")           +
+           expand_limits(y = 0)                         +
+           scale_x_continuous(breaks = seq(0, 220, 20)) + 
+           ylab("Class size")                           +
+           xlab("Enrollment count")                     +
            ggtitle("A. Fifth grade")
 
 first.stage <- arrangeGrob(p5, p4, ncol = 1)
