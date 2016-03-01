@@ -5,11 +5,11 @@
 # ggplot2: plot results              #
 library(foreign)
 library(lfe)
-library(scales)
 library(ggplot2)
 
 # Download the data and unzip it
-download.file('http://economics.mit.edu/~dautor/outsourcingatwill_table7.zip', 'outsourcingatwill_table7.zip')
+download.file('http://economics.mit.edu/~dautor/outsourcingatwill_table7.zip', 
+              'outsourcingatwill_table7.zip')
 unzip('outsourcingatwill_table7.zip')
 
 # Load the data
@@ -25,7 +25,7 @@ autor$svcfrac <- autor$svcemp / autor$nonemp
 
 # Total business services employment from CBP
 autor$bizemp <- autor$svcemp + autor$peremp
-autor$lnbiz  <- log(autor$biz)
+autor$lnbiz  <- log(autor$bizemp)
 
 # Restrict sample
 autor <- autor[which(autor$year >= 79 & autor$year <= 95), ]
@@ -47,7 +47,7 @@ autor$other   <- autor$rs_om  + autor$rs_of
 autor$married <- autor$marfem + autor$marmale
 
 # Modify union variable (1. Don't interpolate 1979, 1981; 2. Rescale into percentage)
-autor$unmem[79 >= autor$year & autor$year >= 81] <- NA
+autor$unmem[79 == autor$year | autor$year == 81] <- NA
 autor$unmem                                      <- autor$unmem * 100
 
 # Create state and year factors
