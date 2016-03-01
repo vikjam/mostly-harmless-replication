@@ -3,7 +3,7 @@
 
 ### Figure 6-1-1
 
-Completed in [Stata](Figure%206-1-1.do) and [R](Figure%206-1-1.r)
+Completed in [Stata](Figure%206-1-1.do), [R](Figure%206-1-1.r) and [Python](Figure%206-1-1.py)
 
 ![Figure 6-1-1 in Stata](Figure 6-1-1-Stata.png)
 
