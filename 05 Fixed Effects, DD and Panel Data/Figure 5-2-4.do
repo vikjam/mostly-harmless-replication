@@ -25,7 +25,7 @@ gen svcfrac = svcemp / nonemp
 
 /* Total business services employment from CBP */
 gen bizemp = svcemp + peremp
-gen lnbiz  = log(biz)
+gen lnbiz  = log(bizemp)
 
 /* Time trends */
 gen t  = year - 78 // Linear time trend
