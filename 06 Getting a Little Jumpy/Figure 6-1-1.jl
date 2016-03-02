@@ -22,37 +22,35 @@ y_nonlin  = 0.5 .* sin(6 .* (x .- 0.5)) .+ 0.5 .+ (x .> 0.5) .* 0.25 .+ rand(nor
 y_mistake = 1 ./ (1 .+ exp(-25 .* (x .- 0.5))) .+ rand(normal, nsims)
 
 # Fit lines using user-created function
-function rdfit(x, y, cutoff, degree)
-    coef_0 = curve_fit(Poly, x[cutoff .>= x], y[cutoff .>= x], degree)
-    fit_0  = fit(x[cutoff .>= x])
+function rdfit(xvar, yvar, cutoff, degree)
+    coef_0 = curve_fit(Poly, xvar[cutoff .>= x], yvar[cutoff .>= x], degree)
+    fit_0  = coef_0(xvar[cutoff .>= x])
 
-    coef_1 = curve_fit(Poly, x[x .> cutoff], y[x .> cutoff], degree)
-    fit_1  = fit(x[x .> cutoff])
+    coef_1 = curve_fit(Poly, xvar[xvar .> cutoff], yvar[xvar .> cutoff], degree)
+    fit_1  = coef_1(xvar[xvar .> cutoff])
 
-    nx_0 = length(x[x .> cutoff])
+    nx_0 = length(xvar[xvar .> cutoff])
 
-    df_0 = DataFrame(x_0 = x[cutoff .>= x], fit_0 = fit_0)
-    df_1 = DataFrame(x_1 = x[x .> cutoff],  fit_1 = fit_1)
-    na_0 = DataFrame(repeat([NA], outer = [100 - nx_0, 2]))
-    na_1 = DataFrame(repeat([NA], outer = [nx_0, 2]))
-    names!(na_0, [:x_0, :fit_0])
-    names!(na_1, [:x_1, :fit_1])
-    append!(df_0, na_0)
-    append!(na_0, df_0)
-
-    df = DataFrame(x_0   = append!(x[cutoff .>= x], repmat([NA], 100 - nx_0, 1)[:]),
-                   fit_0 = append!(fit_0, repmat([NA], 100 - nx_0, 1)[:]),
-                   x_1   = append!(repmat([NA], nx_0, 1)[:], x[x .> cutoff]),
-                   fit_0 = append!(repmat([NA], nx_0, 1)[:], fit_1),
-                   x     = x,
-                   y     = y)
-    return df
+    df_0 = DataFrame(x_0 = xvar[cutoff .>= xvar], fit_0 = fit_0)
+    df_1 = DataFrame(x_1 = xvar[xvar .> cutoff],  fit_1 = fit_1)
+ 
+    return df_0, df_1
 end
 
-data_linear  = rdfit(x, y_linear, 0.5, 1)
-data_nonlin  = rdfit(x, y_nonlin, 0.5, 2)
-data_mistake = rdfit(x, y_mistake, 0.5, 2)
+data_linear_0, data_linear_1 = rdfit(x, y_linear, 0.5, 1)
+data_nonlin_0, data_nonlin_1 = rdfit(x, y_nonlin, 0.5, 2)
+data_mistake_0, data_mistake_1 = rdfit(x, y_mistake, 0.5, 2)
 
-plot(data_linear_0, layer(x = "x_0", y = "fit_0", Geom.line, Theme(default_color = parse(Colorant, "green"))))
+plot(layer(x = x, y = y_linear, Geom.point),
+     layer(x = data_linear_0[:x_0], y = data_linear_0[:fit_0], Geom.line),
+     layer(x = data_linear_1[:x_1], y = data_linear_1[:fit_1], Geom.line))
+
+plot(layer(x = x, y = y_nonlin, Geom.point),
+     layer(x = data_nonlin_0[:x_0], y = data_nonlin_0[:fit_0], Geom.line),
+     layer(x = data_nonlin_1[:x_1], y = data_nonlin_1[:fit_1], Geom.line))
+
+plot(layer(x = x, y = y_mistake, Geom.point),
+     layer(x = data_mistake_0[:x_0], y = data_mistake_0[:fit_0], Geom.line),
+     layer(x = data_mistake_1[:x_1], y = data_mistake_1[:fit_1], Geom.line))
 
 # End of script
