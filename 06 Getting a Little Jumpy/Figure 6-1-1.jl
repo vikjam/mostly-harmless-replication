@@ -1,6 +1,8 @@
 # Load packages
 using DataFrames
 using Gadfly
+using Cairo
+using Fontconfig
 using Distributions
 using CurveFit
 using Colors
@@ -39,18 +41,37 @@ end
 
 data_linear_0, data_linear_1 = rdfit(x, y_linear, 0.5, 1)
 data_nonlin_0, data_nonlin_1 = rdfit(x, y_nonlin, 0.5, 2)
-data_mistake_0, data_mistake_1 = rdfit(x, y_mistake, 0.5, 2)
+data_mistake_0, data_mistake_1 = rdfit(x, y_mistake, 0.5, 1)
 
-plot(layer(x = x, y = y_linear, Geom.point),
-     layer(x = data_linear_0[:x_0], y = data_linear_0[:fit_0], Geom.line),
-     layer(x = data_linear_1[:x_1], y = data_linear_1[:fit_1], Geom.line))
+p_linear = plot(layer(x = x, y = y_linear, Geom.point),
+                layer(x = data_linear_0[:x_0], y = data_linear_0[:fit_0], Geom.line),
+                layer(x = data_linear_1[:x_1], y = data_linear_1[:fit_1], Geom.line),
+                layer(xintercept = [0.5], Geom.vline),
+                Guide.xlabel("x"),
+                Guide.ylabel("Outcome"),
+                Guide.title("A. Linear E[Y<sub>01</sub> | X<sub>i</sub>]"))
 
-plot(layer(x = x, y = y_nonlin, Geom.point),
-     layer(x = data_nonlin_0[:x_0], y = data_nonlin_0[:fit_0], Geom.line),
-     layer(x = data_nonlin_1[:x_1], y = data_nonlin_1[:fit_1], Geom.line))
+p_nonlin = plot(layer(x = x, y = y_nonlin, Geom.point),
+                layer(x = data_nonlin_0[:x_0], y = data_nonlin_0[:fit_0], Geom.line),
+                layer(x = data_nonlin_1[:x_1], y = data_nonlin_1[:fit_1], Geom.line),
+                layer(xintercept = [0.5], Geom.vline),
+                Guide.xlabel("x"),
+                Guide.ylabel("Outcome"),
+                Guide.title("B. Nonlinear E[Y<sub>01</sub> | X<sub>i</sub>]"))
 
-plot(layer(x = x, y = y_mistake, Geom.point),
-     layer(x = data_mistake_0[:x_0], y = data_mistake_0[:fit_0], Geom.line),
-     layer(x = data_mistake_1[:x_1], y = data_mistake_1[:fit_1], Geom.line))
+function rd_mistake(x)
+    1 / (1 + exp(-25 * (x - 0.5)))
+end
+
+p_mistake = plot(layer(x = x, y = y_mistake, Geom.point),
+                 layer(x = data_mistake_0[:x_0], y = data_mistake_0[:fit_0], Geom.line),
+                 layer(x = data_mistake_1[:x_1], y = data_mistake_1[:fit_1], Geom.line),
+                 layer(rd_mistake, 0, 1),
+                 layer(xintercept = [0.5], Geom.vline),
+                 Guide.xlabel("x"),
+                 Guide.ylabel("Outcome"),
+                 Guide.title("C. Nonlinearity mistaken for discontinuity"))
+
+draw(PNG("Figure 6-1-1-Julia.png", 6inch, 8inch), vstack(p_linear, p_nonlin, p_mistake))
 
 # End of script
