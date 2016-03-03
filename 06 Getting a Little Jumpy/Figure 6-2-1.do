@@ -2,8 +2,8 @@ clear all
 set more off
 
 /* Download data */
-* shell curl -o final4.dta http://economics.mit.edu/files/1359
-* shell curl -o final5.dta http://economics.mit.edu/files/1358
+shell curl -o final4.dta http://economics.mit.edu/files/1359
+shell curl -o final5.dta http://economics.mit.edu/files/1358
 
 /*---------*/
 /* Grade 4 */
