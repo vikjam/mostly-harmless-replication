@@ -24,14 +24,14 @@ end
 
 ticks = collect(0:20:220)
 p_grade4 = plot(layer(x = grade4means[:c_size], y = grade4means[:classize_mean], Geom.line),
-                layer(maimonides_rule, 1, 220, Theme(line_style = Gadfly.get_stroke_vector(:dashdot))),
+                layer(maimonides_rule, 1, 220, Theme(line_style = Gadfly.get_stroke_vector(:dot))),
                 Guide.xticks(ticks = ticks),
                 Guide.xlabel("Enrollment count"),
                 Guide.ylabel("Class size"),
                 Guide.title("B. Fourth grade"))
 
 p_grade5 = plot(layer(x = grade5means[:c_size], y = grade5means[:classize_mean], Geom.line),
-                layer(maimonides_rule, 1, 220, Theme(line_style = Gadfly.get_stroke_vector(:dashdot))),
+                layer(maimonides_rule, 1, 220, Theme(line_style = Gadfly.get_stroke_vector(:dot))),
                 Guide.xticks(ticks = ticks),
                 Guide.xlabel("Enrollment count"),
                 Guide.ylabel("Class size"),
