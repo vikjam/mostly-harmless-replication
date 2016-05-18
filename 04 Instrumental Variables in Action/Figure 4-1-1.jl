@@ -18,10 +18,12 @@ names!(pums, [:lwklywge, :educ, :yob, :qob, :pob])
 means = aggregate(pums, [:yob, :qob], [mean])
 
 # Create dates
-n = nrow(means)
-means[:date] = NA
-for i = 1:n
-    means[:date][i] = DateTime(1900 + means[:yob][i], means[:qob][i] * 12, 1)
-end
+means[:date] = [Date(1900 + y, m * 3, 1) for (y, m) in zip(means[:yob], means[:qob])]
+
+# Plot
+p = plot(means,
+		 layer(x = "date", y = "educ_mean", Geom.point, Geom.line))
+p = plot(means,
+		 layer(x = "date", y = "lwklywge_mean", Geom.point, Geom.line))
 
 # End of file
