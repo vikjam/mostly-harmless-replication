@@ -19,5 +19,8 @@ A bold attempt to replicate the tables and figures from the book [_Mostly Harmle
 7. Quantile Regression
 8. [Nonstandard Standard Error Issues](08%20Nonstandard%20Standard%20Error%20Issues/08%20Nonstanard%20Standard%20Error%20Issues.md)
 
+## Getting started
+Check out [Getting Started](https://github.com/vikjam/mostly-harmless-replication/wiki/Getting-started) in the Wiki for tips on setting up your machine with each of these languages.
+
 ## Contributions
 Feel free to submit [pull requests](https://github.com/blog/1943-how-to-write-the-perfect-pull-request)!
