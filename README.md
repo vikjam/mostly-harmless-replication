@@ -16,7 +16,7 @@ A bold attempt to replicate the tables and figures from the book [_Mostly Harmle
 4. [Instrumental Variables in Action](04%20Instrumental%20Variables%20in%20Action/04%20Instrumental%20Variables%20in%20Action.md)
 5. [Parallel Worlds](05%20Fixed%20Effects%2C%20DD%20and%20Panel%20Data/05%20Fixed%20Effects%2C%20DD%20and%20Panel%20Data.md)
 6. [Getting a Little Jumpy](06%20Getting%20a%20Little%20Jumpy/06%20Getting%20a%20Little%20Jumpy.md)
-7. Quantile Regression
+7. [Quantile Regression](07%20Quantile%20Regression/07%20Quantil%20Regression.md)
 8. [Nonstandard Standard Error Issues](08%20Nonstandard%20Standard%20Error%20Issues/08%20Nonstanard%20Standard%20Error%20Issues.md)
 
 ## Getting started
@@ -24,3 +24,4 @@ Check out [Getting Started](https://github.com/vikjam/mostly-harmless-replicatio
 
 ## Contributions
 Feel free to submit [pull requests](https://github.com/blog/1943-how-to-write-the-perfect-pull-request)!
+
