@@ -13,7 +13,7 @@ matrix rownames R = 80 90 00
 matrix colnames R = Obs Mean SD 10 25 50 75 90 Coef MSE
 
 /* Loop through the years to get the results */
-foreach year of numlist 80 90 00 {
+foreach year in "80" "90" "00" {
 	/* Load data */
 	use "Data/census`year'.dta", clear
 
