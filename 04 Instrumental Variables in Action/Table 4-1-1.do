@@ -23,6 +23,7 @@ ivregress 2sls lwklywge (educ = qob1), robust
 ivregress 2sls lwklywge i.yob i.pob (educ = qob1), robust
 
 /* Column 5: 2SLS with YOB, POB dummies and instrument (QOB = 1 | QOB = 2) */
+gen qob1or2 = (inlist(qob, 1, 2)) if !missing(qob)
 ivregress 2sls lwklywge i.yob i.pob (educ = qob1or2), robust
 
 /* Column 6: 2SLS with YOB, POB dummies and full QOB dummies */

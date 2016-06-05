@@ -4,12 +4,12 @@ set more off
 /* Stata code for Table 7.1.1 */
 
 /* Download data */
-shell curl -o angcherfer06.zip http://economics.mit.edu/files/384
-unzipfile angcherfer06.zip, replace
+* shell curl -o angcherfer06.zip http://economics.mit.edu/files/384
+* unzipfile angcherfer06.zip, replace
 
 /* Create matrix to store all the results */
-matrix R = J(3, 10, .)
-matrix rownames R = 80 90 00
+matrix R = J(6, 10, .)
+matrix rownames R = 80 80se 90 90se 00 00se
 matrix colnames R = Obs Mean SD 10 25 50 75 90 Coef MSE
 
 /* Loop through the years to get the results */
@@ -30,15 +30,18 @@ foreach year in "80" "90" "00" {
 	/* Run quantile regressions */
 	foreach tau of numlist 10 25 50 75 90 {
 		qreg logwk educ black exper exper2 [pweight = perwt], q(`tau')
-		matrix R[rownumb(R, "`year'"), colnumb(R, "`tau'")] = _b[edu]
+		matrix R[rownumb(R, "`year'"), colnumb(R, "`tau'")]   = _b[edu]
+		matrix R[rownumb(R, "`year'se"), colnumb(R, "`tau'")] = _se[edu]
 	}
 
 	/* Run OLS */
 	regress logwk educ black exper exper2 [pweight = perwt]
-	matrix R[rownumb(R, "`year'"), colnumb(R, "Coef")] = _b[edu]
+	matrix R[rownumb(R, "`year'"), colnumb(R, "Coef")]   = _b[edu]
+	matrix R[rownumb(R, "`year'se"), colnumb(R, "Coef")] = _se[edu]
 	matrix R[rownumb(R, "`year'"), colnumb(R, "MSE")]  = e(rmse)
 }
 
+/* List results */
 matlist R
 
 /* End of file */
