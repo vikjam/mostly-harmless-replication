@@ -37,10 +37,10 @@ calculate.qr <- function(year) {
     names(qr.results) <- paste("qr", taus, sep = "")
 
     # Run OLS regressions and get MSE
-    qr.results$ols     <- lm(logwk ~ educ + black + exper + exper2,
-                             weights = perwt,
-                             data    = df)
-    qr.results$ols.mse <- mean(summary(qr.results$ols)$residuals^2, na.rm = TRUE)
+    qr.results$ols <- lm(logwk ~ educ + black + exper + exper2,
+                         weights = perwt,
+                         data    = df)
+    qr.results$mse <- mean(summary(qr.results$ols)$residuals^2, na.rm = TRUE)
 
     # Summary statistics
     qr.results$obs  <- length(na.omit(df$educ))
@@ -54,5 +54,11 @@ calculate.qr <- function(year) {
 years          <- c("80", "90", "00")
 results        <- lapply(years, calculate.qr)
 names(results) <- paste("y", results, sep = "")
+
+extract.results <- function(year) {
+    coef.row <- cbind(year$obs, year$mean, year$sd, year$mse)
+    se.row   <-  
+    return(rbind(coef.row, se.row))
+}
 
 # End of file
