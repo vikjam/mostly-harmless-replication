@@ -2,7 +2,7 @@
 ## 7.1 The Quantile Regression Model
 
 ### Table 7.1.1
-Completed in [Stata](Figure%207-1-1.do)
+Completed in [Stata](Table%207-1-1.do)
 
 ```
        Obs   	 Mean     	 SD       	 10       	 25       	 50       	 75       	 90       	 Coef		MSE
