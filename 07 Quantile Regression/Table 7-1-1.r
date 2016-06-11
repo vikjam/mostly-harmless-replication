@@ -2,24 +2,23 @@
 # Required packages                #
 # - haven: read in .dta files      #
 # - quantreg: quantile regressions #
-# - broom: manipulate results      #
 # - knitr: markdown tables         #
 library(haven)
 library(quantreg)
-library(broom)
-library(plyr)
+library(knitr)
 
 # Download data and unzip the data
 download.file('http://economics.mit.edu/files/384', 'angcherfer06.zip')
 unzip('angcherfer06.zip')
 
-# Create a function to run the quantile regressions so we can use a loop
+# Create a function to run the quantile/OLS regressions so we can use a loop
 quant.mincer <- function(tau, data) {
-    qr <- rq(logwk ~ educ + black + exper + exper2,
-             weights = perwt,
-             data    = data,
-             tau     = tau)
-    return(qr)
+    r <- rq(logwk ~ educ + black + exper + exper2,
+            weights = perwt,
+            data    = data,
+            tau     = tau)
+    return(rbind(summary(r)$coefficients["educ", "Value"],
+                 summary(r)$coefficients["educ", "Std. Error"]))
 }
 
 # Create function for producing the results
@@ -32,33 +31,41 @@ calculate.qr <- function(year) {
     df <- read_dta(dta.path)
 
     # Run quantile regressions
-    taus              <- c(0.25, 0.5, 0.75, 0.9)
-    qr.results        <- lapply(taus, quant.mincer, data = df)
-    names(qr.results) <- paste("qr", taus, sep = "")
+    taus <- c(0.1, 0.25, 0.5, 0.75, 0.9)
+    qr   <- sapply(taus, quant.mincer, data = df)
 
-    # Run OLS regressions and get MSE
-    qr.results$ols <- lm(logwk ~ educ + black + exper + exper2,
-                         weights = perwt,
-                         data    = df)
-    qr.results$mse <- mean(summary(qr.results$ols)$residuals^2, na.rm = TRUE)
+    # Run OLS regressions and get RMSE
+    ols     <- lm(logwk ~ educ + black + exper + exper2,
+                  weights = perwt,
+                  data    = df)
+    coef.se <- rbind(summary(ols)$coefficients["educ", "Estimate"],
+                     summary(ols)$coefficients["educ", "Std. Error"])
+    rmse    <- sqrt(mean(summary(ols)$residuals^2, na.rm = TRUE))
 
     # Summary statistics
-    qr.results$obs  <- length(na.omit(df$educ))
-    qr.results$mean <- mean(df$educ, na.rm = TRUE)
-    qr.results$sd   <- sd(df$educ, na.rm = TRUE)
+    obs  <- length(na.omit(df$educ))
+    mean <- mean(df$logwk, na.rm = TRUE)
+    sd   <- sd(df$logwk, na.rm = TRUE)
 
-    return(qr.results)
+    return(cbind(rbind(obs, NA),
+                 rbind(mean, NA),
+                 rbind(sd, NA),
+                 qr,
+                 coef.se,
+                 rbind(rmse, NA)))
 
 }
 
-years          <- c("80", "90", "00")
-results        <- lapply(years, calculate.qr)
-names(results) <- paste("y", results, sep = "")
+results <- rbind(calculate.qr("80"),
+                 calculate.qr("90"),
+                 calculate.qr("00"))
+results <- round(results, 3)
 
-extract.results <- function(year) {
-    coef.row <- cbind(year$obs, year$mean, year$sd, year$mse)
-    se.row   <-  
-    return(rbind(coef.row, se.row))
-}
+# Export table
+row.names(results) <- c("1980", "", "1990", "", "2000", "")
+colnames(results)  <- c("Obs", "Mean", "Std Dev",
+                        "0.1", "0.25", "0.5", "0.75", "0.9",
+                        "OLS", "RMSE")
+print(kable(results))
 
 # End of file
