@@ -40,7 +40,7 @@ calculate.qr <- function(year) {
                   data    = df)
     coef.se <- rbind(summary(ols)$coefficients["educ", "Estimate"],
                      summary(ols)$coefficients["educ", "Std. Error"])
-    rmse    <- sqrt(mean(summary(ols)$residuals^2, na.rm = TRUE))
+    rmse    <- sqrt(sum(summary(ols)$residuals^2) / ols$df.residual)
 
     # Summary statistics
     obs  <- length(na.omit(df$educ))
@@ -56,16 +56,23 @@ calculate.qr <- function(year) {
 
 }
 
+# Generate results
 results <- rbind(calculate.qr("80"),
                  calculate.qr("90"),
                  calculate.qr("00"))
-results <- round(results, 3)
 
-# Export table
+# Name rows and columns
 row.names(results) <- c("1980", "", "1990", "", "2000", "")
 colnames(results)  <- c("Obs", "Mean", "Std Dev",
                         "0.1", "0.25", "0.5", "0.75", "0.9",
                         "OLS", "RMSE")
+
+# Format decimals
+results              <- round(results, 3)
+results[ , c(2, 10)] <- round(results[ , c(2, 10)], 2)
+results[ , 1]        <- formatC(results[ , 1], format = "d", big.mark = ",")
+
+# Export table
 print(kable(results))
 
 # End of file
