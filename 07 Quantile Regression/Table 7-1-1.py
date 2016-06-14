@@ -19,10 +19,9 @@ from tabulate import tabulate
 # with zipfile.ZipFile('angcherfer06.zip', 'r') as z:
 #    z.extractall()
 
-# Function to run the quantil regressions
+# Function to run the quantile regressions
 def quant_mincer(q, data):
-  wdata  = data[['logwk', 'educ', 'black', 'exper', 'exper2']].multiply(1 / data['perwt'], axis = 'index')
-  r      = smf.quantreg('logwk ~ educ + black + exper + exper2', wdata)
+  r      = smf.quantreg('logwk ~ educ + black + exper + exper2', data)
   result = r.fit(q = q)
   coef   = result.params['educ']
   se     = result.bse['educ']
@@ -31,30 +30,36 @@ def quant_mincer(q, data):
 # Create dictionary to store the results
 results = defaultdict(list)
 
-taus  = [0.1, 0.25, 0.5, 0.75, 0.9]
+# Loop over years and quantiles
 years = ['80', '90', '00']
+taus  = [0.1, 0.25, 0.5, 0.75, 0.9]
 
 for year in years:
     # Load data
-    dta_path   = 'Data/census%s.dta' % year
-    df         = pd.read_stata(dta_path)
+    dta_path = 'Data/census%s.dta' % year
+    df       = pd.read_stata(dta_path)
+    # Weight the data by perwt
+    wdf      = df[['logwk', 'educ', 'black', 'exper', 'exper2']]. \
+               multiply(1 / df['perwt'], axis = 'index')
     # Summary statistics
     results['Obs']  += [df['logwk'].count(), None]
     results['Mean'] += [np.mean(df['logwk']), None]
     results['Std']  += [np.std(df['logwk']), None]
     # Quantile regressions
     for tau in taus:
-        results[tau] += quant_mincer(tau, df)
+        results[tau] += quant_mincer(tau, wdf)
     # Run OLS with weights to get OLS parameters and MSE
-    X          = df[['educ', 'black', 'exper', 'exper2']]
-    X          = sm.add_constant(X)
-    y          = df['logwk']
-    w          = df['perwt']
-    wls_model  = sm.WLS(y, X, weights = w)
+    wls_model  = smf.ols('logwk ~ educ + black + exper + exper2', wdf)
     wls_result = wls_model.fit()
     results['OLS']  += [wls_result.params['educ'], wls_result.bse['educ']]
     results['RMSE'] += [np.sqrt(wls_result.mse_resid), None]
 
+# Export table
 print(tabulate(results, headers = 'keys'))
+table = np.column_stack((results['Obs'], results['Mean'], results['Std'],
+                         results['0.1'], results['0.25'], results['0.5'],
+                         results['0.75'], results['0.9'],
+                         results['OLS'], results['RMSE']))
+print(tabulate(table))
 
 # End of script
