@@ -40,7 +40,7 @@ for year in years:
     df       = pd.read_stata(dta_path)
     # Weight the data by perwt
     wdf      = df[['logwk', 'educ', 'black', 'exper', 'exper2']]. \
-               multiply(1 / df['perwt'], axis = 'index')
+               multiply(df['perwt'], axis = 'index')
     # Summary statistics
     results['Obs']  += [df['logwk'].count(), None]
     results['Mean'] += [np.mean(df['logwk']), None]
@@ -54,12 +54,26 @@ for year in years:
     results['OLS']  += [wls_result.params['educ'], wls_result.bse['educ']]
     results['RMSE'] += [np.sqrt(wls_result.mse_resid), None]
 
-# Export table
-print(tabulate(results, headers = 'keys'))
-table = np.column_stack((results['Obs'], results['Mean'], results['Std'],
-                         results['0.1'], results['0.25'], results['0.5'],
-                         results['0.75'], results['0.9'],
-                         results['OLS'], results['RMSE']))
-print(tabulate(table))
+# Export table (round the results and place them in a DataFrame to tabulate)
+def format_results(the_list, the_format):
+  return([the_format.format(x) if x else x for x in the_list])
+
+table = pd.DataFrame(columns = ['Year', 'Obs', 'Mean', 'Std',
+                                '0.1', '0.25', '0.5', '0.75', '0.9',
+                                'OLS', 'RMSE'])
+
+table['Year'] = ['1980', None, '1990', None, '2000', None]
+table['Obs']  = format_results(results['Obs'], '{:,}')
+table['Mean'] = format_results(results['Mean'], '{:.2f}')
+table['Std']  = format_results(results['Std'], '{:.3f}')
+table['0.1']  = format_results(results[0.1], '{:.3f}')
+table['0.25'] = format_results(results[0.25], '{:.3f}')
+table['0.5']  = format_results(results[0.5], '{:.3f}')
+table['0.75'] = format_results(results[0.75], '{:.3f}')
+table['0.9']  = format_results(results[0.9], '{:.3f}')
+table['OLS']  = format_results(results['OLS'], '{:.3f}')
+table['RMSE'] = format_results(results['RMSE'], '{:.2f}')
+
+print(tabulate(table, headers = 'keys'))
 
 # End of script
