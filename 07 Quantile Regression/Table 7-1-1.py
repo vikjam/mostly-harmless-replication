@@ -21,7 +21,7 @@ from tabulate import tabulate
 
 # Function to run the quantile regressions
 def quant_mincer(q, data):
-  r      = smf.quantreg('logwk ~ educ + black + exper + exper2', data)
+  r      = smf.quantreg('logwk ~ educ + black + exper + exper2 + wt - 1', data)
   result = r.fit(q = q)
   coef   = result.params['educ']
   se     = result.bse['educ']
@@ -39,8 +39,10 @@ for year in years:
     dta_path = 'Data/census%s.dta' % year
     df       = pd.read_stata(dta_path)
     # Weight the data by perwt
-    wdf      = df[['logwk', 'educ', 'black', 'exper', 'exper2']]. \
-               multiply(df['perwt'], axis = 'index')
+    df['wt']  = np.sqrt(df['perwt'])
+    wdf       = df[['logwk', 'educ', 'black', 'exper', 'exper2']]. \
+                multiply(df['wt'], axis = 'index')
+    wdf['wt'] = df['wt']
     # Summary statistics
     results['Obs']  += [df['logwk'].count(), None]
     results['Mean'] += [np.mean(df['logwk']), None]
@@ -49,7 +51,7 @@ for year in years:
     for tau in taus:
         results[tau] += quant_mincer(tau, wdf)
     # Run OLS with weights to get OLS parameters and MSE
-    wls_model  = smf.ols('logwk ~ educ + black + exper + exper2', wdf)
+    wls_model  = smf.ols('logwk ~ educ + black + exper + exper2 + wt - 1', wdf)
     wls_result = wls_model.fit()
     results['OLS']  += [wls_result.params['educ'], wls_result.bse['educ']]
     results['RMSE'] += [np.sqrt(wls_result.mse_resid), None]

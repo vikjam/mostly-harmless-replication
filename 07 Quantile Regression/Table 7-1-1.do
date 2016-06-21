@@ -38,7 +38,7 @@ foreach year in "80" "90" "00" {
 	regress logwk educ black exper exper2 [pweight = perwt]
 	matrix R[rownumb(R, "`year'"), colnumb(R, "Coef")]   = _b[edu]
 	matrix R[rownumb(R, "`year'se"), colnumb(R, "Coef")] = _se[edu]
-	matrix R[rownumb(R, "`year'"), colnumb(R, "MSE")]  = e(rmse)
+	matrix R[rownumb(R, "`year'"), colnumb(R, "MSE")]    = e(rmse)
 }
 
 /* List results */
