@@ -15,9 +15,9 @@ from collections import defaultdict
 from tabulate import tabulate
 
 # Download data and unzip file
-# urllib.request.urlretrieve('http://economics.mit.edu/files/384', 'angcherfer06.zip')
-# with zipfile.ZipFile('angcherfer06.zip', 'r') as z:
-#    z.extractall()
+urllib.request.urlretrieve('http://economics.mit.edu/files/384', 'angcherfer06.zip')
+with zipfile.ZipFile('angcherfer06.zip', 'r') as z:
+   z.extractall()
 
 # Function to run the quantile regressions
 def quant_mincer(q, data):
