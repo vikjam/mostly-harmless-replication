@@ -34,7 +34,7 @@ function generateHC(sigma)
     regression = lm(y ~ d, simulated)
     b1         = coef(regression)[2]
     conv       = stderr(regression)[2]
-    ehat  = simulated[:y] - predict(regression)
+    ehat       = simulated[:y] - predict(regression)
 
     # Calculate robust standard errors
     X   = [ones(n) simulated[:d]]
