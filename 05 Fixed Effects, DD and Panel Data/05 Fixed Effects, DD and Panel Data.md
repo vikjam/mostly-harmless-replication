@@ -1,7 +1,7 @@
 # 05 Fixed Effects, DD and Panel Data
-## 6.1 Sharp RD
+## 5.2 Differences-in-differences
 
-### Differences-in-differences: Pre and Post, Treatment and Control
+### Figure 5-2-4
 
 Completed in [Stata](Figure%205-2-4.do) and [R](Figure%205-2-4.r).
 
