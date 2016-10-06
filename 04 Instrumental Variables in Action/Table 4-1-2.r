@@ -16,7 +16,7 @@ pums        <- fread('asciiqob.txt',
 names(pums) <- c('lwklywge', 'educ', 'yob', 'qob', 'pob')
 
 # Create binary variable
-pums$z <- pums$qob == 3 | pums$qob == 4
+pums$z <- (pums$qob == 3 | pums$qob == 4) * 1
 
 # Compare means (and differences)
 ttest.lwklywge <- t.test(lwklywge ~ z, pums)
@@ -27,7 +27,11 @@ sur  <- systemfit(list(first  = educ ~ z,
 	                   second = lwklywge ~ z),
                   data   = pums,
                   method = "SUR")
-wald <- deltaMethod(sur, "second_zTRUE / first_zTRUE")
+wald <- deltaMethod(sur, "second_z / first_z")
+
+wald.estimate <- (mean(pums$lwklywge[pums$z == 1]) - mean(pums$lwklywge[pums$z == 0])) /
+                 (mean(pums$educ[pums$z == 1]) - mean(pums$educ[pums$z == 0]))
+wald.se       <- wald.estimate^2 * ()
 
 # OLS estimate
 ols <- lm(lwklywge ~ educ, pums)
