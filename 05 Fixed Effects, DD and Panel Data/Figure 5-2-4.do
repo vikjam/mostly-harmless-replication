@@ -6,7 +6,6 @@ capture version 14
 /* Stata code for Figure 5.2.4 */
 
 /* Download the data and unzip it */
-
 shell curl -o outsourcingatwill_table7.zip "http://economics.mit.edu/~dautor/outsourcingatwill_table7.zip"
 unzipfile outsourcingatwill_table7.zip
 
