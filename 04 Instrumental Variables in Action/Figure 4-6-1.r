@@ -1,14 +1,13 @@
 # R code for Figure 4.6.1                 #
 # Required packages                       #
 # - MASS: multivariate normal draws       #
-# - AER: running IV regressions           #
-# - RcompAngrist: LIML estimators         #
+# - ivmodel: IV regressions               #
 # - parallel: Parallel process simulation #
 # - ggplot2: making pretty graphs         #
-
-library(AER)
+# - RColorBrewer: pleasing color schemes  #
+# - reshape: manipulate data              #
 library(MASS)
-library(RcompAngrist)
+library(ivmodel)
 library(parallel)
 library(ggplot2)
 library(RColorBrewer)
@@ -33,21 +32,14 @@ irrelevantInstrMC <- function(...) {
     x = 0.1 * Z[ , 1] + xi
     y = x + eta
 
-    # Create data.frame from the simulated values
-    simulated.data        <- data.frame(cbind(y, x, Z))
-    names(simulated.data) <- c("y", "x", paste("z", seq(20), sep = ""))
-
     # OLS
     OLS           <- lm(y ~ x)
     COEFS["ols"]  <- summary(OLS)$coefficients[2, 1]
 
-    # 2SLS
-    TSLS          <- ivreg(y ~ x, ~ Z)
-    COEFS["tsls"] <- summary(TSLS)$coefficients[2, 1]
-
-    # LIML
-    LIML          <- kclass(y ~ x | Z)
-    COEFS["liml"] <- LIML$coefficients[1]
+    # Run IV regressions
+    ivregressions <- ivmodel(Y = y, D = x, Z = Z)
+    COEFS["tsls"] <- coef.ivmodel(ivregressions)["TSLS", "Estimate"]
+    COEFS["liml"] <- coef.ivmodel(ivregressions)["LIML", "Estimate"]
 
     # Return results
     return(COEFS)
@@ -75,4 +67,5 @@ g <- ggplot(df, aes(x = beta, colour = Estimator, linetype = Estimator))        
         theme_set(theme_gray(base_size = 24))                                   
 ggsave(file = "Figure 4-6-1-R.png", height = 8, width = 12, dpi = 300)
 
+write.csv(df, "Figure 4-6-1.csv")
 # End of script
