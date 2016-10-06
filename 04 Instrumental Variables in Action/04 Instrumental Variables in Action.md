@@ -1,7 +1,7 @@
 # 04 Instrumental Variables in Action
 ## 4.1 IV and causality
 
-### Figure 4-1-1
+### Figure 5.2.4
 
 Completed in [Stata](Figure%204-1-1.do), [R](Figure%204-1-1.r) and [Python](Figure%204-1-1.py)
 
