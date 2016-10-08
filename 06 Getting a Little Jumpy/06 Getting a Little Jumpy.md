@@ -9,9 +9,9 @@ Completed in [Stata](Figure%206-1-1.do), [R](Figure%206-1-1.r), [Python](Figure%
 
 ### Figure 6-1-2
 
-Completed in [Stata](Figure%206-1-2.do)
+Completed in [Stata](Figure%206-1-2.do) and [R](Figure%206-1-2.r)
 
-![Figure 6-1-2 in Stata](Figure 6-1-2-Stata.png)
+![Figure 6-1-2 in Stata](Figure 6-1-2-R.png)
 
 ### Figure 6-2-1
 
