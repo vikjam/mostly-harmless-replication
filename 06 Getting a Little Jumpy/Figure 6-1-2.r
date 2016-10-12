@@ -57,7 +57,7 @@ panel.b <- lee[ , i005 := as.numeric(as.character(cut(difshare,
 	                                                   right  = TRUE))), ]
 
 panel.b <- panel.b[ , list(m_vic  = mean(mofficeexp, na.rm = TRUE),
-	                        mp_vic = mean(mpofficeexp, na.rm = TRUE)),
+	                         mp_vic = mean(mpofficeexp, na.rm = TRUE)),
                    by = i005]
 
 panel.b <- panel.b[which(panel.b$i005 > -0.251 & panel.b$i005 < 0.251), ]
