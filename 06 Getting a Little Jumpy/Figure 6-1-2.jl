@@ -23,10 +23,10 @@ panel_a[:difshare3] = panel_a[:difshare].^3
 panel_a[:difshare4] = panel_a[:difshare].^4
 
 logit = glm(myoutcomenext ~ difshare   + difshare2   + difshare3   + difshare4   + d +
-	                        d*difshare + d*difshare2 + d*difshare3 + d*difshare4,
-	        panel_a,
-	        Binomial(),
-	        LogitLink())
+                            d*difshare + d*difshare2 + d*difshare3 + d*difshare4,
+            panel_a,
+            Binomial(),
+            LogitLink())
 panel_a[:mmyoutcomenext] = predict(logit)
 
 # Create local average by 0.005 interval of the running variable
@@ -39,17 +39,17 @@ mean_panel_a  = mean_panel_a[restriction_a, :]
 
 # Plot panel (a)
 plot_a = plot(layer(x = mean_panel_a[:difshare_mean],
-	          	    y = mean_panel_a[:myoutcomenext_mean],
-	          	    Geom.point),
+                  y = mean_panel_a[:myoutcomenext_mean],
+                  Geom.point),
               layer(x = mean_panel_a[mean_panel_a[:difshare_mean] .< 0, :difshare_mean],
-              	    y = mean_panel_a[mean_panel_a[:difshare_mean] .< 0, :mmyoutcomenext_mean],
-              	    Geom.line),
+                    y = mean_panel_a[mean_panel_a[:difshare_mean] .< 0, :mmyoutcomenext_mean],
+                    Geom.line),
               layer(x = mean_panel_a[mean_panel_a[:difshare_mean] .>= 0, :difshare_mean],
-              	    y = mean_panel_a[mean_panel_a[:difshare_mean] .>= 0, :mmyoutcomenext_mean],
-              	    Geom.line),
+                    y = mean_panel_a[mean_panel_a[:difshare_mean] .>= 0, :mmyoutcomenext_mean],
+                    Geom.line),
               layer(xintercept = [0],
-              	    Geom.vline,
-   					Theme(line_style = Gadfly.get_stroke_vector(:dot))),
+                    Geom.vline,
+                    Theme(line_style = Gadfly.get_stroke_vector(:dot))),
               Guide.xlabel("Democratic Vote Share Margin of Victory, Election t"),
               Guide.ylabel("Probability of Victory, Election t+1"),
               Guide.title("a"))
@@ -65,17 +65,17 @@ mean_panel_b  = mean_panel_b[restriction_b, :]
 
 # Plot panel (b)
 plot_b = plot(layer(x = mean_panel_b[:difshare_mean],
-	                y = mean_panel_b[:mofficeexp_mean],
-	                Geom.point),
+                  y = mean_panel_b[:mofficeexp_mean],
+                  Geom.point),
               layer(x = mean_panel_b[mean_panel_b[:difshare_mean] .< 0, :difshare_mean],
-              	    y = mean_panel_b[mean_panel_b[:difshare_mean] .< 0, :mpofficeexp_mean],
-              	    Geom.line),
+                    y = mean_panel_b[mean_panel_b[:difshare_mean] .< 0, :mpofficeexp_mean],
+                    Geom.line),
               layer(x = mean_panel_b[mean_panel_b[:difshare_mean] .>= 0, :difshare_mean],
-              	    y = mean_panel_b[mean_panel_b[:difshare_mean] .>= 0, :mpofficeexp_mean],
-              	    Geom.line),
+                    y = mean_panel_b[mean_panel_b[:difshare_mean] .>= 0, :mpofficeexp_mean],
+                    Geom.line),
               layer(xintercept = [0],
-              	    Geom.vline,
-   					Theme(line_style = Gadfly.get_stroke_vector(:dot))),             
+                    Geom.vline,
+                    Theme(line_style = Gadfly.get_stroke_vector(:dot))),             
               Guide.xlabel("Democratic Vote Share Margin of Victory, Election t"),
               Guide.ylabel("No. of Past Victories as of Election t"),
               Guide.title("b"))
