@@ -3,7 +3,8 @@
 
 ### Figure 3-1-2
 Completed in [Stata](Figure%203-1-2.do), [R](Figure%203-1-2.r), [Python](Figure%203-1-2.py) and [Julia](Figure%203-1-2.jl)
-![Figure 3-1-2 in Julia](Figure 3-1-2-Julia.png)
+
+![Figure 3-1-2 in Julia](https://github.com/vikjam/mostly-harmless-replication/blob/master/03%20Making%20Regression%20Make%20Sense/Figure%203-1-2-Julia.png?raw=true)
 
 ### Table 3-3-2
 Completed in [Stata](Table%203-3-2.do), [R](Table%203-3-2.r), [Python](Table%203-3-2.py) and [Julia](Table%203-3-2.jl)
