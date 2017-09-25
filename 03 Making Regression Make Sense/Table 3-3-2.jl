@@ -44,12 +44,12 @@ nswre74_treat_stats    = summarize(nswre74, nswre74[:treat] .== 1)
 nswre74_control_stats  = summarize(nswre74, nswre74[:treat] .== 0)
 cps1re74_control_stats = summarize(cps1re74, cps1re74[:treat] .== 0)
 cps3re74_control_stats = summarize(cps3re74, cps3re74[:treat] .== 0)
-cps1re74_ptrim_stats   = summarize(cps1re74, (cps1re74[:treat]  .== 0)  &
-	                                         (cps1re74[:pscore] .> 0.1) &
-	                                         (cps1re74[:pscore] .< 0.9))
-cps3re74_ptrim_stats   = summarize(cps3re74, (cps3re74[:treat]  .== 0)  &
-	                                         (cps3re74[:pscore] .> 0.1) &
-	                                         (cps3re74[:pscore] .< 0.9))
+cps1re74_ptrim_stats   = summarize(cps1re74, broadcast(&, cps1re74[:treat]  .== 0,
+	                                         cps1re74[:pscore] .> 0.1,
+	                                         cps1re74[:pscore] .< 0.9))
+cps3re74_ptrim_stats   = summarize(cps3re74, broadcast(&, cps3re74[:treat]  .== 0,
+	                                         cps3re74[:pscore] .> 0.1,
+	                                         cps3re74[:pscore] .< 0.9))
 
 # Combine summary stats, add header and print to markdown
 table      = vcat(nswre74_treat_stats,
