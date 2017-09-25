@@ -14,7 +14,7 @@ pums = readtable("asciiqob.txt",
 names!(pums, [:lwklywge, :educ, :yob, :qob, :pob])
 
 # Run OLS and save predicted values
-OLS = glm(lwklywge ~ educ, pums, Normal(), IdentityLink())
+OLS = glm(@formula(lwklywge ~ educ), pums, Normal(), IdentityLink())
 pums[:predicted] = predict(OLS)
 
 # Aggregate into means for figure
