@@ -22,7 +22,7 @@ means = aggregate(pums, :educ, [mean])
 
 # Plot figure and export figure using Gadfly
 figure = plot(means,
-              layer(x = "educ", y = "predicted_mean", Geom.line, Theme(default_color = color("green"))),
+              layer(x = "educ", y = "predicted_mean", Geom.line, Theme(default_color = colorant"green")),
               layer(x = "educ", y = "lwklywge_mean", Geom.line, Geom.point),
               Guide.xlabel("Years of completed education"),
               Guide.ylabel("Log weekly earnings, \$2003"))
