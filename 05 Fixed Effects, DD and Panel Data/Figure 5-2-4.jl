@@ -1,5 +1,5 @@
 # Load packages
-using DataRead
+using FileIO, StatFiles, DataFrames
 using FixedEffectModels
 
 # Download the data and unzip it
@@ -7,7 +7,7 @@ download("http://economics.mit.edu/~dautor/outsourcingatwill_table7.zip", "outso
 run(`unzip outsourcingatwill_table7.zip`)
 
 # Import data
-autor = readtable("table7/autor-jole-2003.csv");
+autor = DataFrame(load("table7/autor-jole-2003.dta"));
 
 # Log total employment: from BLS employment & earnings
 autor[:lnemp] = autor[:annemp]
@@ -46,10 +46,11 @@ autor[:statepooled] = pool(autor[:state])
 autor[:yearpooled]  = pool(autor[:year])
 
 # Diff-in-diff regression
-reg(lnths ~  lnemp   + admico_2 + admico_1 + admico0  + admico1  + admico2 + 
-             admico3 + mico4    + admppa_2 + admppa_1 + admppa0  + admppa1 +
-             admppa2 + admppa3  + mppa4    + admgfa_2 + admgfa_1 + admgfa0 +
-             admgfa1 + admgfa2  + admgfa3  + mgfa4
-          |> statepooled + yearpooled + statepooled&t, autor)
+reg(autor,
+    @model(lnths ~  lnemp   + admico_2 + admico_1 + admico0  + admico1  + admico2 +
+           admico3 + mico4    + admppa_2 + admppa_1 + admppa0  + admppa1 +
+           admppa2 + admppa3  + mppa4    + admgfa_2 + admgfa_1 + admgfa0 +
+           admgfa1 + admgfa2  + admgfa3  + mgfa4,
+           fe = statepooled + yearpooled + statepooled&t))
 
 # End of script
