@@ -2,7 +2,6 @@
 using DataFrames
 using Gadfly
 using GLM
-using Dates
 
 # Download the data and unzip it
 download("http://economics.mit.edu/files/397", "asciiqob.zip")
