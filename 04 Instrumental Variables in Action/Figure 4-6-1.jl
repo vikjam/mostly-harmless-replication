@@ -57,6 +57,8 @@ p = plot(layer(ols_ecdf, 0, 2.5, Theme(default_color = colorant"red")),
          layer(tsls_ecdf, 0, 2.5, Theme(line_style = :dot)),
          layer(xintercept = [0.5], Geom.vline,
                Theme(default_color = colorant"black", line_style = :dot)),
+         layer(yintercept = [0.5], Geom.hline,
+               Theme(default_color = colorant"black", line_style = :dot)),
          Guide.xlabel("Estimated β"),
          Guide.ylabel("F<sub>n</sub>(Estimated β)"))
 
