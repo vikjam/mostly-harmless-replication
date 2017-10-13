@@ -51,7 +51,6 @@ end
 ols_ecdf  = ecdf(simulation_results[:, 1])
 tsls_ecdf = ecdf(simulation_results[:, 2])
 
-
 # Plot the empirical CDFs of each estimator
 p = plot(layer(ols_ecdf, 0, 2.5, Theme(default_color = colorant"red")),
          layer(tsls_ecdf, 0, 2.5, Theme(line_style = :dot)),
