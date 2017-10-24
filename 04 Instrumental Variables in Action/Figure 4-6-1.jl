@@ -26,7 +26,7 @@ function irrelevantInstrMC()
     errors = DataFrame(transpose(rand(MvNormal(Sigma), N)))
 
     # Rename columns of Z and errors
-    names!(Z, [symbol("z$i") for i in 1:20])
+    names!(Z, [Symbol("z$i") for i in 1:20])
     names!(errors, [:eta, :xi])
 
     # Create y and x
@@ -35,9 +35,9 @@ function irrelevantInstrMC()
     df[:y] = df[:x] .+ df[:eta]
 
     # Run regressions
-    ols  = coef(lm(y ~ x, df))[2]
-    tsls = coef(reg(y ~ (x = z1  + z2  + z3  + z4  + z5  + z6  + z7  + z8  + z9  + z10 +
-                             z11 + z12 + z13 + z14 + z15 + z16 + z17 + z18 + z19 + z20), df))[2]
+    ols  = coef(lm(@formula(y ~ x), df))[2]
+    tsls = coef(reg(df, @model(y ~ z1  + z2  + z3  + z4  + z5  + z6  + z7  + z8  + z9  + z10 +
+                             z11 + z12 + z13 + z14 + z15 + z16 + z17 + z18 + z19 + z20)))[2]
     return([ols tsls])
 end
 
@@ -53,15 +53,11 @@ tsls_ecdf = ecdf(simulation_results[:, 2])
 
 # Plot the empirical CDFs of each estimator
 p = plot(layer(ols_ecdf, 0, 2.5, Theme(default_color = colorant"red")),
-         layer(tsls_ecdf, 0, 2.5, Theme(line_style = Gadfly.get_stroke_vector(:dot))),
-         layer(xintercept = [0.5],
-               Geom.vline,
-               Theme(default_color = colorant"black",
-                     line_style = Gadfly.get_stroke_vector(:dot))),
-         layer(yintercept = [0.5],
-               Geom.hline,
-               Theme(default_color = colorant"black",
-                     line_style = Gadfly.get_stroke_vector(:dot))),
+         layer(tsls_ecdf, 0, 2.5, Theme(line_style = :dot)),
+         layer(xintercept = [0.5], Geom.vline,
+               Theme(default_color = colorant"black", line_style = :dot)),
+         layer(yintercept = [0.5], Geom.hline,
+               Theme(default_color = colorant"black", line_style = :dot)),
          Guide.xlabel("Estimated β"),
          Guide.ylabel("F<sub>n</sub>(Estimated β)"))
 
