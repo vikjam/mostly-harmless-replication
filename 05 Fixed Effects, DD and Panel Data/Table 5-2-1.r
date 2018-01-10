@@ -34,7 +34,7 @@ semean <- function(x, na.rm = FALSE) {
 # Calucate means
 summary.means <- njmin[ , c("FTE", "FTE2", "STATE")]         %>%
                  group_by(STATE)                             %>%
-                 summarise_each(funs(mean(., na.rm = TRUE)))
+                 summarise_all(funs(mean(., na.rm = TRUE)))
 summary.means <- as.data.frame(t(summary.means[ , -1]))
 
 colnames(summary.means)  <- c("PA", "NJ")
@@ -48,7 +48,7 @@ row.names(summary.means) <- c("FTE employment before, all available observations
 # Calucate
 summary.semeans <- njmin[ , c("FTE", "FTE2", "STATE")]         %>%
                  group_by(STATE)                               %>%
-                 summarise_each(funs(semean(., na.rm = TRUE)))
+                 summarise_all(funs(semean(., na.rm = TRUE)))
 summary.semeans <- as.data.frame(t(summary.semeans[ , -1]))
 
 colnames(summary.semeans)  <- c("PA", "NJ")
@@ -61,6 +61,6 @@ njmin         <- melt(njmin,
                       value.name    = "FTE")
 summary.means <- njmin                   %>%
                  group_by(STATE, Period) %>%
-                 summarise_each(funs(mean(., na.rm = TRUE), semean(., na.rm = TRUE)))
+                 summarise_all(funs(mean(., na.rm = TRUE), semean(., na.rm = TRUE)))
 
 # End of script
