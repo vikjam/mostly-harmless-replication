@@ -18,6 +18,8 @@ if(length(new.packages)) install.packages(new.packages, repos= "http://cran.cnr.
 lapply(list.of.packages, require, character.only = TRUE)
 ```
 
+
+
 ### Section 5.2.1 - Regression DD 
 
 We want to reproduce Figure 5.2.4 from MHE. This figure was originally produced by [Autor (2003)](http://economics.mit.edu/files/589) (Figure 3 in the original) to show the estimated impact of implied-contract exceptions to the employment-at-will doctrine over the use of temporary workers.
