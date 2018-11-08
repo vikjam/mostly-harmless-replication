@@ -4,7 +4,7 @@ using FixedEffectModels
 
 # Download the data and unzip it
 download("http://economics.mit.edu/~dautor/outsourcingatwill_table7.zip", "outsourcingatwill_table7.zip")
-run(`unzip outsourcingatwill_table7.zip`)
+run(`unzip -o outsourcingatwill_table7.zip`)
 
 # Import data
 autor = DataFrame(load("table7/autor-jole-2003.dta"));
@@ -13,13 +13,13 @@ autor = DataFrame(load("table7/autor-jole-2003.dta"));
 autor[:lnemp] = autor[:annemp]
 
 # Non-business-service sector employment from CBP
-autor[:nonemp]  = autor[:stateemp] - autor[:svcemp]
-autor[:lnnon]   = log(autor[:nonemp])
+autor[:nonemp]  = autor[:stateemp] .- autor[:svcemp]
+autor[:lnnon]   = log.(autor[:nonemp])
 autor[:svcfrac] = autor[:svcemp] ./ autor[:nonemp]
 
 # Total business services employment from CBP
-autor[:bizemp] = autor[:svcemp] + autor[:peremp]
-autor[:lnbiz]  = log(autor[:bizemp])
+autor[:bizemp] = autor[:svcemp] .+ autor[:peremp]
+autor[:lnbiz]  = log.(autor[:bizemp])
 
 # Restrict sample
 autor = autor[autor[:year] .>= 79, :];
@@ -27,23 +27,23 @@ autor = autor[autor[:year] .<= 95, :];
 autor = autor[autor[:state] .!= 98, :];
 
 # State dummies, year dummies, and state*time trends
-autor[:t]  = autor[:year] - 78
+autor[:t]  = autor[:year] .- 78
 autor[:t2] = autor[:t].^2
 
 # Generate more aggregate demographics
-autor[:clp]     = autor[:clg]    + autor[:gtc]
-autor[:a1624]   = autor[:m1619]  + autor[:m2024] + autor[:f1619] + autor[:f2024]
-autor[:a2554]   = autor[:m2554]  + autor[:f2554]
-autor[:a55up]   = autor[:m5564]  + autor[:m65up] + autor[:f5564] + autor[:f65up]
-autor[:fem]     = autor[:f1619]  + autor[:f2024] + autor[:f2554] + autor[:f5564] + autor[:f65up]
-autor[:white]   = autor[:rs_wm]  + autor[:rs_wf]
-autor[:black]   = autor[:rs_bm]  + autor[:rs_bf]
-autor[:other]   = autor[:rs_om]  + autor[:rs_of]
-autor[:married] = autor[:marfem] + autor[:marmale]
+autor[:clp]     = autor[:clg]    .+ autor[:gtc]
+autor[:a1624]   = autor[:m1619]  .+ autor[:m2024] .+ autor[:f1619] .+ autor[:f2024]
+autor[:a2554]   = autor[:m2554]  .+ autor[:f2554]
+autor[:a55up]   = autor[:m5564]  .+ autor[:m65up] .+ autor[:f5564] .+ autor[:f65up]
+autor[:fem]     = autor[:f1619]  .+ autor[:f2024] .+ autor[:f2554] .+ autor[:f5564] .+ autor[:f65up]
+autor[:white]   = autor[:rs_wm]  .+ autor[:rs_wf]
+autor[:black]   = autor[:rs_bm]  .+ autor[:rs_bf]
+autor[:other]   = autor[:rs_om]  .+ autor[:rs_of]
+autor[:married] = autor[:marfem] .+ autor[:marmale]
 
 # Create pooled variable from state
-autor[:statepooled] = pool(autor[:state])
-autor[:yearpooled]  = pool(autor[:year])
+autor[:statepooled] = categorical(autor[:state])
+autor[:yearpooled]  = categorical(autor[:year])
 
 # Diff-in-diff regression
 reg(autor,
