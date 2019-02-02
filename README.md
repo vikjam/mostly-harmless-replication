@@ -9,6 +9,8 @@ A bold attempt to replicate the tables and figures from the book [_Mostly Harmle
 * Python
 * Julia
 
+Why undertake this madness? My primary motivation was to see if I could replace Stata with either R, Python, or Julia in my workflow, so I tried to replicate _Mostly Harmless Econometrics_ in each of these languages.
+
 ## Chapters
 1. Questions about _Questions_
 2. The Experimental Ideal
