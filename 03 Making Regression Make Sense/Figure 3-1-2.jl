@@ -1,24 +1,25 @@
 # Load packages
+using CSV
 using DataFrames
-using Gadfly
 using GLM
+using Statistics
+using Gadfly
+using Cairo
 
 # Download the data and unzip it
 download("http://economics.mit.edu/files/397", "asciiqob.zip")
 run(`unzip asciiqob.zip`)
 
 # Import data
-pums = readtable("asciiqob.txt",
-                 header    = false,
-                 separator = ' ')
-names!(pums, [:lwklywge, :educ, :yob, :qob, :pob])
+pums = DataFrame(CSV.File("asciiqob.txt", header = false, delim = " ",  ignorerepeated = true))
+rename!(pums, [:lwklywge, :educ, :yob, :qob, :pob])
 
 # Run OLS and save predicted values
-OLS = glm(@formula(lwklywge ~ educ), pums, Normal(), IdentityLink())
-pums[:predicted] = predict(OLS)
+OLS = lm(@formula(lwklywge ~ educ), pums)
+pums.predicted = predict(OLS)
 
 # Aggregate into means for figure
-means = aggregate(pums, :educ, [mean])
+means = combine(groupby(pums, :educ), [:lwklywge, :predicted] .=> mean)
 
 # Plot figure and export figure using Gadfly
 figure = plot(means,
