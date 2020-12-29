@@ -5,11 +5,11 @@ using Gadfly
 using Cairo
 
 # Download the data and unzip it
-# download(
-#     "http://economics.mit.edu/~dautor/outsourcingatwill_table7.zip",
-#     "outsourcingatwill_table7.zip",
-# )
-# run(`unzip -o outsourcingatwill_table7.zip`)
+download(
+    "http://economics.mit.edu/~dautor/outsourcingatwill_table7.zip",
+    "outsourcingatwill_table7.zip",
+)
+run(`unzip -o outsourcingatwill_table7.zip`)
 
 # Import data
 autor = DataFrame(load("table7/autor-jole-2003.dta"));
