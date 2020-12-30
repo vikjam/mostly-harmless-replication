@@ -46,7 +46,7 @@ autor.black = autor.rs_bm .+ autor.rs_bf;
 autor.other = autor.rs_om .+ autor.rs_of;
 autor.married = autor.marfem .+ autor.marmale;
 
-# Create pooled variable from state
+# Create categorical variable for state and year
 autor.state_c = categorical(autor.state);
 autor.year_c = categorical(autor.year);
 
@@ -64,14 +64,17 @@ did = reg(
     Vcov.cluster(:state_c),
 )
 
+# Store results in a DataFrame for a plot
 results_did = DataFrame(
     label = coefnames(did),
     coef  = coef(did) .* 100,
     se    = stderror(did) .* 100
 );
 
+# Keep only the relevant coefficients
 results_did = filter(r -> any(occursin.(r"admico|mico", r.label)), results_did);
 
+# Define labels for coefficients
 results_did.label .= [
     "2 yr prior",
     "1 yr prior",
@@ -82,6 +85,7 @@ results_did.label .= [
     "4+ yr after",
 ];
 
+# Make plot
 figure = plot(
     results_did,
     x = "label",
@@ -98,4 +102,5 @@ figure = plot(
     Guide.ylabel("Log points"),
 );
 
+# Export figure
 draw(PNG("Figure 5-2-4-Julia.png", 7inch, 6inch), figure);
