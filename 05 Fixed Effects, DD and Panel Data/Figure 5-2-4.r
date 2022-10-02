@@ -9,7 +9,7 @@ library(ggplot2)
 
 # Download the data and unzip it
 download.file(
-  "http://economics.mit.edu/~dautor/outsourcingatwill_table7.zip",
+  "https://www.dropbox.com/s/m6o0704ohzwep4s/outsourcingatwill_table7.zip?dl=1",
   "outsourcingatwill_table7.zip"
 )
 unzip("outsourcingatwill_table7.zip")

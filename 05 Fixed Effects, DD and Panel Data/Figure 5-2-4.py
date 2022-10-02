@@ -11,7 +11,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # Download data and unzip the data
-urllib.request.urlretrieve('http://economics.mit.edu/~dautor/outsourcingatwill_table7.zip', 'outsourcingatwill_table7.zip')
+urllib.request.urlretrieve('https://www.dropbox.com/s/m6o0704ohzwep4s/outsourcingatwill_table7.zip?dl=1', 'outsourcingatwill_table7.zip')
 with zipfile.ZipFile('outsourcingatwill_table7.zip', 'r') as z:
   z.extractall()
 

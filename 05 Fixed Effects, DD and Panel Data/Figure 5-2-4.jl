@@ -1,12 +1,12 @@
 # Load packages
-using FileIO, StatFiles, DataFrames
+using FileIO, StatFiles, DataFrames, CategoricalArrays
 using FixedEffectModels
 using Gadfly
 using Cairo
 
 # Download the data and unzip it
 download(
-    "http://economics.mit.edu/~dautor/outsourcingatwill_table7.zip",
+    "https://www.dropbox.com/s/m6o0704ohzwep4s/outsourcingatwill_table7.zip?dl=1",
     "outsourcingatwill_table7.zip",
 )
 run(`unzip -o outsourcingatwill_table7.zip`)
