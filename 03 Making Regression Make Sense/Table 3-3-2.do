@@ -4,7 +4,7 @@ eststo clear
 /* Required programs      */
 /* - estout: output table */
 
-/* Stata code for Table 3.3.2*/
+/* Stata code for Table 3.3.2 */
 
 * Store URL to MHE Data Archive in local
 local base_url = "https://economics.mit.edu/sites/default/files/inline-files"
