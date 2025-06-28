@@ -5,28 +5,24 @@
 library(haven)
 library(knitr)
 
-# Download the files
-download.file("http://economics.mit.edu/files/3828", "nswre74.dta")
-download.file("http://economics.mit.edu/files/3824", "cps1re74.dta")
-download.file("http://economics.mit.edu/files/3825", "cps3re74.dta")
-
-# Read the Stata files into R
-nswre74  <- read_dta("nswre74.dta")
-cps1re74 <- read_dta("cps1re74.dta")
-cps3re74 <- read_dta("cps3re74.dta")
+# Read the Stata files into R directly from MHE Data Archive
+base_url = "https://economics.mit.edu/sites/default/files/inline-files"
+nswre74  <- read_dta(paste(base_url, "nswre74.dta", sep = "/"))
+cps1re74 <- read_dta(paste(base_url, "cps1re74.dta", sep = "/"))
+cps3re74 <- read_dta(paste(base_url, "cps3re74.dta", sep = "/"))
 
 # Function to create propensity trimmed data
 propensity.trim <- function(dataset) {
-    # Specify control formulas
-    controls <- c("age", "age2", "ed", "black", "hisp", "nodeg", "married", "re74", "re75")
-    # Paste together probit specification
-    spec <- paste("treat", paste(controls, collapse = " + "), sep = " ~ ")
-    # Run probit
-    probit <- glm(as.formula(spec), family = binomial(link = "probit"), data = dataset)
-    # Predict probability of treatment
-    pscore <- predict(probit, type = "response")
-    # Return data set within range
-    dataset[which(pscore > 0.1 & pscore < 0.9), ]
+  # Specify control formulas
+  controls <- c("age", "age2", "ed", "black", "hisp", "nodeg", "married", "re74", "re75")
+  # Paste together probit specification
+  spec <- paste("treat", paste(controls, collapse = " + "), sep = " ~ ")
+  # Run probit
+  probit <- glm(as.formula(spec), family = binomial(link = "probit"), data = dataset)
+  # Predict probability of treatment
+  pscore <- predict(probit, type = "response")
+  # Return data set within range
+  dataset[which(pscore > 0.1 & pscore < 0.9), ]
 }
 
 # Propensity trim data
@@ -35,12 +31,12 @@ cps3re74.ptrim <- propensity.trim(cps3re74)
 
 # Create function for summary statistics
 summarize <- function(dataset, treat) {
-    # Variables to summarize
-    summary.variables <- c("age", "ed", "black", "hisp", "nodeg", "married", "re74", "re75")
-    # Calculate mean, removing missing
-    summary.means <- sapply(dataset[treat, summary.variables], mean, na.rm = TRUE)
-    summary.count <- sum(treat)
-    c(summary.means, count = summary.count)
+  # Variables to summarize
+  summary.variables <- c("age", "ed", "black", "hisp", "nodeg", "married", "re74", "re75")
+  # Calculate mean, removing missing
+  summary.means <- sapply(dataset[treat, summary.variables], mean, na.rm = TRUE)
+  summary.count <- sum(treat)
+  c(summary.means, count = summary.count)
 }
 
 # Summarize data
