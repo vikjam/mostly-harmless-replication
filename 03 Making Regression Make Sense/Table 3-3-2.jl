@@ -4,10 +4,11 @@ using FileIO, StatFiles
 using Statistics
 using GLM
 
-# Download the data
-download("http://economics.mit.edu/files/3828", "nswre74.dta")
-download("http://economics.mit.edu/files/3824", "cps1re74.dta")
-download("http://economics.mit.edu/files/3825", "cps3re74.dta")
+# Download the data from the MHE Data Archive
+base_url = "https://economics.mit.edu/sites/default/files/inline-files"
+download("$(base_url)/nswre74.dta", "nswre74.dta")
+download("$(base_url)/cps1re74.dta", "cps1re74.dta")
+download("$(base_url)/cps3re74.dta", "cps3re74.dta")
 
 # Read the Stata files into Julia
 nswre74  = DataFrame(load("nswre74.dta"))
