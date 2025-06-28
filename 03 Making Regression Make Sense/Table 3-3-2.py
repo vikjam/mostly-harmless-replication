@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Tested on Python 3.4
+Tested on Python 3.11.13
 """
 
 import urllib.request
@@ -10,15 +10,11 @@ import numpy as np
 import patsy
 from tabulate import tabulate
 
-# Download data
-urllib.request.urlretrieve('http://economics.mit.edu/files/3828', 'nswre74.dta')
-urllib.request.urlretrieve('http://economics.mit.edu/files/3824', 'cps1re74.dta')
-urllib.request.urlretrieve('http://economics.mit.edu/files/3825', 'cps3re74.dta')
-
-# Read the Stata files into Python
-nswre74  = pd.read_stata("nswre74.dta")
-cps1re74 = pd.read_stata("cps1re74.dta")
-cps3re74 = pd.read_stata("cps3re74.dta")
+# Read the Stata files into Python directly from website
+base_url = 'https://economics.mit.edu/sites/default/files/inline-files'
+nswre74  = pd.read_stata(f"{base_url}/nswre74.dta")
+cps1re74 = pd.read_stata(f"{base_url}/cps1re74.dta")
+cps3re74 = pd.read_stata(f"{base_url}/cps3re74.dta")
 
 # Store list of variables for summary
 summary_vars = ['age', 'ed', 'black', 'hisp', 'nodeg', 'married', 're74', 're75']
