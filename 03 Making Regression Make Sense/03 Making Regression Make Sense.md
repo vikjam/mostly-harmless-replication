@@ -24,7 +24,7 @@ _Covariate means in the NSW and observational control samples_
 |Number of Obs.     |185       |260         |15,992     |429        |352           |157           |
 
 ### Figure 3-1-2
-Completed in [Stata](Figure%203-1-3.do) and [R](Figure%203-1-3.r)
+Completed in [Stata](Figure%203-1-3.do), [R](Figure%203-1-3.r) and [Python](Figure%203-1-3.py)
 
 ```
 /* Old-fashioned standard errors */
