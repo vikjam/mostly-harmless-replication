@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Tested on Python 3.4
+Tested on Python 3.11.5
 """
 
 import urllib
@@ -8,27 +8,54 @@ import zipfile
 import urllib.request
 import pandas as pd
 import statsmodels.api as sm
+import statsmodels.formula.api as smf
 
-# Download data and unzip the data
-urllib.request.urlretrieve('http://economics.mit.edu/files/397', 'asciiqob.zip')
-with zipfile.ZipFile('asciiqob.zip', "r") as z:
-   z.extractall()
-
-# Read the data into a pandas dataframe
-pums         = pd.read_csv('asciiqob.txt',
-                           header           = None,
-                           delim_whitespace = True)
+# Read the data into a pandas.DataFrame
+angrist_archive_url = (
+   'https://economics.mit.edu/sites/'
+   'default/files/publications/asciiqob.zip'
+)
+pums = pd.read_csv(
+   angrist_archive_url,
+   compression = 'zip',
+   header = None,
+   sep = '\s+'
+)
 pums.columns = ['lwklywge', 'educ', 'yob', 'qob', 'pob']
 
+# Panel A
+# Set up the model and fit it
+mod_a = smf.ols(
+   formula = 'lwklywge ~ educ',
+   data = pums
+)
+res_a = mod_a.fit()
+# Old-fashioned standard errors
+print(res_a.summary(title='Old-fashioned standard errors'))
+# Robust standard errors
+res_a_robust = res_a.get_robustcov_results(cov_type='HC1')
+print(
+   res_a_robust.summary(title='Robust standard errors')
+)
+# Panel B
 # Calculate means and count by educ attainment
-groupbyeduc = pums.groupby('educ')
-educ_means  = groupbyeduc['lwklywge'].mean()
-educ_count  = groupbyeduc['lwklywge'].count()
-
-# Set up the model
-y = pums.lwklywge
-X = pums.educ
-X = sm.add_constant(X)
-
+pums_agg = pums.groupby('educ').agg(
+   lwklywge = ('lwklywge', 'mean'),
+   count = ('lwklywge', 'count')
+).reset_index()
+# Set up the model and fit it
+mod_b = smf.wls(
+   formula = 'lwklywge ~ educ',
+   weights = pums_agg['count'],
+   data = pums_agg
+)
+res_b = mod_b.fit()
+# Old-fashioned standard errors
+print(res_b.summary(title='Old-fashioned standard errors'))
+# Robust standard errors
+res_b_robust = res_b.get_robustcov_results(cov_type='HC1')
+print(
+   res_b_robust.summary(title='Robust standard errors')
+)
 
 # End of script
